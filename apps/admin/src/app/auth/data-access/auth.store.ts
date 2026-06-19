@@ -65,7 +65,7 @@ export const AuthStore = signalStore(
           _authService.signOut().pipe(
             tap(() => {
               patchState(store, { user: null });
-              router.navigateByUrl('/auth/sign-in');
+              router.navigateByUrl('/locked');
             }),
             catchError((error: Error) => {
               patchState(store, { error: getApiErrorMessage(error, 'Déconnexion échouée') });

@@ -14,3 +14,14 @@ export const authGuard: CanActivateFn = () => {
     map(() => (authStore.hasRights() ? true : router.createUrlTree(['/locked'])))
   );
 };
+
+export const lockedGuard: CanActivateFn = () => {
+  const authStore = inject(AuthStore);
+  const router = inject(Router);
+
+  return toObservable(authStore.isVerifying).pipe(
+    filter((isVerifying) => !isVerifying),
+    take(1),
+    map(() => (authStore.hasRights() ? router.createUrlTree(['/']) : true))
+  );
+};
