@@ -1,0 +1,17 @@
+import { Routes } from '@angular/router';
+import { LandingLayout } from './layout/layout';
+
+export const landingRoutes: Routes = [
+  {
+    path: '',
+    component: LandingLayout,
+    children: [
+      {
+        path: '',
+        title: 'Home',
+        loadComponent: () => import('./features/home/home')
+      },
+      { path: '**', redirectTo: '/' }
+    ]
+  }
+];
