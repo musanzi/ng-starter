@@ -6,7 +6,7 @@ import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { Scheme, Theming } from '@libs/core';
 
 @Component({
-  selector: 'scheme-switcher',
+  selector: 'ui-scheme-switcher',
   imports: [MatIcon, MatIconButton, MatMenu, MatMenuItem, MatPseudoCheckbox, MatMenuTrigger],
   template: `
     <button matIconButton [matMenuTriggerFor]="schemeMenu">

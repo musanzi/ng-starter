@@ -49,6 +49,25 @@ export const AuthStore = signalStore(
         )
       )
     ),
+    updateAvatar: rxMethod<File>(
+      pipe(
+        tap(() => patchState(store, { isLoading: true, error: null, success: null })),
+        exhaustMap((file) =>
+          _authService.updateAvatar(file).pipe(
+            tap((user) => {
+              patchState(store, { user, success: 'Photo de profil mise à jour.' });
+            }),
+            catchError((error: Error) => {
+              patchState(store, {
+                error: getApiErrorMessage(error, 'Impossible de mettre à jour la photo de profil')
+              });
+              return of(null);
+            }),
+            finalize(() => patchState(store, { isLoading: false }))
+          )
+        )
+      )
+    ),
     updatePassword: rxMethod<IUpdatePasswordPayload>(
       pipe(
         tap(() => patchState(store, { isLoading: true, error: null, success: null })),
@@ -174,6 +193,9 @@ export const AuthStore = signalStore(
     ),
     clearMessages(): void {
       patchState(store, { error: null, success: null });
+    },
+    setError(error: string): void {
+      patchState(store, { error, success: null });
     },
     setUser(user: IUser | null): void {
       patchState(store, { user });

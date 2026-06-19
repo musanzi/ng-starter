@@ -40,6 +40,13 @@ export class AuthService {
     return this.http.patch<IUser>('/auth/me', dto);
   }
 
+  updateAvatar(file: File): Observable<IUser> {
+    const formData = new FormData();
+    formData.append('avatar', file);
+
+    return this.http.post<IUser>('/users/profile/avatar', formData);
+  }
+
   updatePassword(dto: IUpdatePasswordPayload): Observable<void> {
     return this.http.patch<void>('/auth/password', dto);
   }

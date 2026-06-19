@@ -11,6 +11,7 @@ export const routes: Route[] = [
     path: '',
     canActivate: [authGuard],
     loadComponent: () => import('./dashboard/layout/layout').then((c) => c.AdminLayout),
-    loadChildren: () => import('./dashboard/features/profile/profile.routes').then((r) => r.profileRoutes)
-  }
+    loadChildren: () => import('./dashboard/dashboard.routes').then((r) => r.dashboardRoutes)
+  },
+  { path: '**', redirectTo: '' }
 ];

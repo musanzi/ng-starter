@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
-import { DashboardNavigation } from '@libs/ui';
+import { Component, computed, inject } from '@angular/core';
+import { AuthStore } from '@admin/app/auth/data-access';
+import { DashboardNavigation, User } from '@libs/ui';
+import { getProfileAvatarUrl } from '../../utils';
 import { NAVIGATION } from '../data/navigation.data';
 
 @Component({
   selector: 'admin-sidebar',
-  imports: [DashboardNavigation],
+  imports: [DashboardNavigation, User],
   host: {
     class: 'flex w-full flex-auto flex-col'
   },
@@ -14,9 +16,15 @@ import { NAVIGATION } from '../data/navigation.data';
         <div class="text-on-surface text-lg leading-none font-bold tracking-wider">ADMIN</div>
       </div>
     </div>
-    <dashboard-navigation class="mt-8 mb-4 flex-auto" [navItems]="navItems" />
+
+    <ui-dashboard-navigation class="mt-8 mb-4 flex-auto" [navItems]="navItems" />
+
+    <ui-user class="mx-4 mb-4" [user]="authStore.user()" [avatarUrl]="avatarUrl()" (signOut)="authStore.signOut()" />
   `
 })
 export class AdminSidebar {
+  authStore = inject(AuthStore);
+  protected readonly avatarUrl = computed(() => getProfileAvatarUrl(this.authStore.user()?.avatar));
+
   navItems = NAVIGATION;
 }

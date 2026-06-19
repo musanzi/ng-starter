@@ -2,7 +2,35 @@
   <div class="col-span-full">
     <div class="text-lg font-semibold">Informations du compte</div>
     <div class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-      Mettez à jour le nom et l'adresse e-mail associés à votre compte.
+      Mettez à jour la photo, le nom et l'adresse e-mail associés à votre compte.
+    </div>
+  </div>
+
+  <div class="col-span-full flex flex-col gap-4 sm:flex-row sm:items-center">
+    <div
+      class="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-full border border-neutral-200 bg-neutral-100 text-neutral-500 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-400"
+    >
+      @if (avatarUrl(); as avatar) {
+        <img class="h-full w-full object-cover" [src]="avatar" alt="Photo de profil" />
+      } @else {
+        <mat-icon class="icon-size-10" svgIcon="user"></mat-icon>
+      }
+    </div>
+
+    <div class="min-w-0">
+      <div class="text-sm font-medium">Photo de profil</div>
+      <div class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">JPG, PNG, WebP ou GIF. 2 Mo maximum.</div>
+      <input
+        class="hidden"
+        type="file"
+        accept="image/jpeg,image/png,image/webp,image/gif"
+        (change)="uploadAvatar($event)"
+        #avatarInput
+      />
+      <button class="mt-3" type="button" matButton="outlined" [disabled]="authStore.isLoading()" (click)="avatarInput.click()">
+        <mat-icon svgIcon="upload"></mat-icon>
+        {{ authStore.isLoading() ? 'Chargement...' : 'Changer la photo' }}
+      </button>
     </div>
   </div>
 

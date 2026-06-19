@@ -14,3 +14,14 @@ export const authGuard: CanActivateFn = () => {
     map(() => (authStore.user() ? true : router.createUrlTree(['/auth/sign-in'])))
   );
 };
+
+export const unauthGuard: CanActivateFn = () => {
+  const authStore = inject(AuthStore);
+  const router = inject(Router);
+
+  return toObservable(authStore.isVerifying).pipe(
+    filter((isVerifying) => !isVerifying),
+    take(1),
+    map(() => (authStore.user() ? router.createUrlTree(['/dashboard']) : true))
+  );
+};

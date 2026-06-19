@@ -9,7 +9,7 @@ export const NAVIGATION: INavigationItem[] = [
       {
         id: 'account/info',
         label: 'Mon compte',
-        icon: 'settings',
+        icon: 'user',
         route: '/dashboard/account'
       },
       {

@@ -9,7 +9,7 @@ import { INavigationItem } from '@libs/utils';
 import { filter, take } from 'rxjs';
 
 @Component({
-  selector: 'dashboard-navigation',
+  selector: 'ui-dashboard-navigation',
   imports: [MatIcon, NgTemplateOutlet, RouterLinkActive, Tree, TreeItem, TreeItemGroup, RouterLink, CdkMonitorFocus],
   template: `
     <div class="flex flex-col gap-y-4">

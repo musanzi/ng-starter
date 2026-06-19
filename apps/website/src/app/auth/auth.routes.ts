@@ -1,8 +1,10 @@
 import { Routes } from '@angular/router';
+import { unauthGuard } from './data-access';
 
 export const authRoutes: Routes = [
   {
     path: '',
+    canActivate: [unauthGuard],
     title: 'Auth',
     loadComponent: () => import('./layout/layout').then((c) => c.AuthLayout),
     children: [

@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { email, form, FormField, required, submit } from '@angular/forms/signals';
 import { MatButton } from '@angular/material/button';
 import { MatDivider } from '@angular/material/divider';
@@ -6,6 +6,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { AuthStore } from '@website/app/auth/data-access';
+import { getProfileAvatarUrl } from '@website/app/dashboard/utils/avatar-url';
+
+const MAX_AVATAR_SIZE = 2 * 1024 * 1024;
+const ALLOWED_AVATAR_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 
 @Component({
   selector: 'account-settings',
@@ -15,6 +19,7 @@ import { AuthStore } from '@website/app/auth/data-access';
 export class ProfilAccount {
   protected readonly authStore = inject(AuthStore);
 
+  protected readonly avatarUrl = computed(() => getProfileAvatarUrl(this.authStore.user()?.avatar));
   protected accountSettingsModel = signal(this.getUserFormValue());
   protected accountSettingsForm = form(this.accountSettingsModel, (schema) => {
     required(schema.name, { message: 'Le nom est obligatoire' });
@@ -33,6 +38,32 @@ export class ProfilAccount {
     submit(this.accountSettingsForm, async () => {
       this.authStore.updateProfile(this.accountSettingsModel());
     });
+  }
+
+  protected uploadAvatar(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    this.authStore.clearMessages();
+
+    if (!ALLOWED_AVATAR_TYPES.includes(file.type)) {
+      this.authStore.setError('Format non pris en charge. Utilisez JPG, PNG, WebP ou GIF.');
+      input.value = '';
+      return;
+    }
+
+    if (file.size > MAX_AVATAR_SIZE) {
+      this.authStore.setError('La photo de profil ne doit pas dépasser 2 Mo.');
+      input.value = '';
+      return;
+    }
+
+    this.authStore.updateAvatar(file);
+    input.value = '';
   }
 
   private getUserFormValue(): { name: string; email: string } {
