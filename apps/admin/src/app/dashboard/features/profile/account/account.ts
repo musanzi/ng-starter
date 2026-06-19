@@ -5,7 +5,7 @@ import { MatDivider } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { AuthStore } from '@website/app/auth/data-access';
+import { AuthStore } from '@admin/app/auth/data-access';
 
 @Component({
   selector: 'account-settings',

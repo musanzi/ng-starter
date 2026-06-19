@@ -1,5 +1,4 @@
 import { Component, inject } from '@angular/core';
-import { MatIcon } from '@angular/material/icon';
 import { MatFormField } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
@@ -16,8 +15,7 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/rou
     RouterLinkActive,
     MatFormField,
     MatSelect,
-    MatOption,
-    MatIcon
+    MatOption
   ],
   templateUrl: './layout.html'
 })
@@ -27,12 +25,12 @@ export class ProfileLayout {
     {
       id: 'account',
       label: 'Compte',
-      route: '/auth/profile/account'
+      route: '/dashboard/account'
     },
     {
       id: 'security',
       label: 'Sécurité',
-      route: '/auth/profile/security'
+      route: '/dashboard/security'
     }
   ];
 }

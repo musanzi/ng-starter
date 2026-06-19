@@ -1,19 +1,6 @@
-import { IsActiveMatchOptions } from '@angular/router';
+import { INavigationItem } from '@libs/utils';
 
-export interface NavigationItem {
-  id: string;
-  label: string;
-  description?: string;
-  route?: string;
-  icon?: string;
-  badge?: string;
-  children?: NavigationItem[];
-  disabled?: boolean;
-  expanded?: boolean;
-  activeOptions?: { exact: boolean } | IsActiveMatchOptions;
-}
-
-export const NAVIGATION: NavigationItem[] = [
+export const NAVIGATION: INavigationItem[] = [
   {
     id: 'account',
     label: 'Mon compte',

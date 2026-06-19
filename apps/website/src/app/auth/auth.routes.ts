@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './data-access';
 
 export const authRoutes: Routes = [
   {
@@ -40,24 +39,19 @@ export const authRoutes: Routes = [
       },
       {
         path: 'profile',
-        title: 'Profile',
-        canActivate: [authGuard],
-        loadComponent: () => import('./features/profile/layout/layout').then((c) => c.ProfileLayout),
+        pathMatch: 'full',
+        redirectTo: '/dashboard'
+      },
+      {
+        path: 'profile',
         children: [
           {
-            path: '',
-            pathMatch: 'full',
-            redirectTo: 'account'
-          },
-          {
             path: 'account',
-            title: 'Account',
-            loadComponent: () => import('./features/profile/account/account').then((c) => c.ProfilAccount)
+            redirectTo: '/dashboard/account'
           },
           {
             path: 'security',
-            title: 'Security',
-            loadComponent: () => import('./features/profile/security/security').then((c) => c.PorfilSecurity)
+            redirectTo: '/dashboard/security'
           }
         ]
       }

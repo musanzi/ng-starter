@@ -1,21 +1,21 @@
 import { Tree, TreeItem, TreeItemGroup } from '@angular/aria/tree';
 import { CdkMonitorFocus } from '@angular/cdk/a11y';
 import { NgTemplateOutlet } from '@angular/common';
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, effect, inject, input, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatIcon } from '@angular/material/icon';
 import { isActive, IsActiveMatchOptions, NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { INavigationItem } from '@libs/utils';
 import { filter, take } from 'rxjs';
-import { NavigationItem, NAVIGATION } from '../data/navigation';
 
 @Component({
-  selector: 'navigation',
+  selector: 'dashboard-navigation',
   imports: [MatIcon, NgTemplateOutlet, RouterLinkActive, Tree, TreeItem, TreeItemGroup, RouterLink, CdkMonitorFocus],
   template: `
     <div class="flex flex-col gap-y-4">
       @for (section of navigation(); track section.id) {
         <div class="flex flex-col px-4">
-          <div class="px-2.5 py-1.5 text-sm font-semibold text-blue-400">
+          <div class="px-2.5 py-1.5 text-sm font-semibold text-primary-400">
             {{ section.label }}
 
             @if (section.description) {
@@ -35,7 +35,6 @@ import { NavigationItem, NAVIGATION } from '../data/navigation';
             />
           </ul>
 
-          <!-- Menu item -->
           <ng-template let-nodes="nodes" let-parent="parent" #treeNodes>
             @for (node of nodes; track node.id) {
               <a
@@ -55,16 +54,13 @@ import { NavigationItem, NAVIGATION } from '../data/navigation';
                 #rla="routerLinkActive"
                 #treeItem="ngTreeItem"
               >
-                <!-- Icon -->
                 @if (node.icon) {
                   <mat-icon class="pointer-events-none size-4" [svgIcon]="node.icon" />
                 }
 
-                <!-- Label -->
                 <div class="flex flex-auto flex-col font-medium">
                   {{ node.label }}
 
-                  <!-- Description -->
                   @if (node.description) {
                     <div class="text-xs">
                       {{ node.description }}
@@ -72,14 +68,12 @@ import { NavigationItem, NAVIGATION } from '../data/navigation';
                   }
                 </div>
 
-                <!-- Badge -->
                 @if (node.badge) {
                   <div class="rounded bg-pink-400 px-1.5 py-0.5 text-xs font-semibold dark:bg-pink-700">
                     {{ node.badge }}
                   </div>
                 }
 
-                <!-- Expand icon -->
                 @if (node.children && node.children.length > 0) {
                   <mat-icon
                     svgIcon="chevron-right"
@@ -89,7 +83,6 @@ import { NavigationItem, NAVIGATION } from '../data/navigation';
                 }
               </a>
 
-              <!-- Children -->
               @if (node.children && node.children.length > 0) {
                 <ul
                   class="flex flex-col gap-y-1 [&_ul>.navigation-item]:pl-14.5 [&>.navigation-item]:pl-8.5"
@@ -115,10 +108,11 @@ import { NavigationItem, NAVIGATION } from '../data/navigation';
     </div>
   `
 })
-export class Navigation {
+export class DashboardNavigation {
   private router = inject(Router);
+  navItems = input.required<INavigationItem[]>();
 
-  protected navigation = signal<NavigationItem[]>(NAVIGATION);
+  protected navigation = signal<INavigationItem[]>([]);
   protected navigationEnd = toSignal(
     this.router.events.pipe(
       filter((event) => event instanceof NavigationEnd),
@@ -127,7 +121,9 @@ export class Navigation {
   );
 
   constructor() {
-    // Expand active route on initial load
+    effect(() => {
+      this.navigation.set(this.navItems());
+    });
     effect(() => {
       const navigationEnd = this.navigationEnd();
       if (!navigationEnd) {
@@ -138,7 +134,7 @@ export class Navigation {
     });
   }
 
-  expandActiveRoute(items: NavigationItem[]): NavigationItem[] {
+  expandActiveRoute(items: INavigationItem[]): INavigationItem[] {
     for (const item of items) {
       if (item.children?.length) {
         item.children = this.expandActiveRoute(item.children);

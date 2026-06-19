@@ -2,11 +2,11 @@ import { RenderMode, ServerRoute } from '@angular/ssr';
 
 export const serverRoutes: ServerRoute[] = [
   {
-    path: 'auth/profile',
+    path: 'dashboard',
     renderMode: RenderMode.Client,
   },
   {
-    path: 'auth/profile/**',
+    path: 'dashboard/**',
     renderMode: RenderMode.Client,
   },
   {
