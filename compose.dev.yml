@@ -6,7 +6,7 @@ services:
     restart: unless-stopped
     command: pnpm dev:website --host=0.0.0
     ports:
-      - '3000:3000'
+      - '4200:4200'
     volumes:
       - .:/app
       - /app/node_modules
@@ -18,7 +18,7 @@ services:
     restart: unless-stopped
     command: pnpm dev:admin --host=0.0.0
     ports:
-      - '4000:4000'
+      - '4300:4300'
     volumes:
       - .:/app
       - /app/node_modules

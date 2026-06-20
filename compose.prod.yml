@@ -6,7 +6,7 @@ services:
     restart: unless-stopped
     command: pnpm ssr:website --host=0.0.0
     ports:
-      - '3000:3000'
+      - '4200:4200'
 
   admin:
     build:
@@ -15,4 +15,4 @@ services:
     restart: unless-stopped
     command: pnpm ssr:admin --host=0.0.0
     ports:
-      - '3000:3000'
+      - '4300:4300'
