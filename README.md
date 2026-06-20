@@ -34,6 +34,7 @@ The workspace uses Nx, pnpm, Angular SSR, shared libraries, and a shared styling
 
 - Node.js `>=24.0.0`
 - pnpm
+- Docker, if you want to build and run the apps in containers
 
 Install pnpm if needed:
 
@@ -63,22 +64,52 @@ Run the admin app:
 pnpm dev:admin
 ```
 
-The admin app runs on `http://localhost:4000`.
+The admin app runs on `http://localhost:4300`.
+
+## Docker
+
+Start both apps in development mode:
+
+```bash
+docker compose -f compose.dev.yml up
+```
+
+Start both apps in production mode:
+
+```bash
+docker compose -f compose.prod.yml up
+```
+
+The website runs on `http://localhost:4200` and the admin app runs on `http://localhost:4300`.
+
+To start only one app, add the service name:
+
+```bash
+docker compose -f compose.dev.yml up website
+docker compose -f compose.dev.yml up admin
+```
+
+Use the same service names with the production compose file:
+
+```bash
+docker compose -f compose.prod.yml up website
+docker compose -f compose.prod.yml up admin
+```
+
+The development compose file builds the Dockerfile `development` stage and mounts the local workspace into the container for live development. The production compose file builds the `production` stage and runs the SSR servers from the built output.
 
 ## Available Scripts
 
-| Command | Description |
-| --- | --- |
-| `pnpm dev:website` | Start the website dev server on port `4200`. |
-| `pnpm dev:admin` | Start the admin dev server on port `4000`. |
-| `pnpm build` | Build both applications. |
-| `pnpm build:website` | Build only the website app. |
-| `pnpm build:admin` | Build only the admin app. |
-| `pnpm lint` | Lint both applications. |
-| `pnpm lint:website` | Lint only the website app. |
-| `pnpm lint:admin` | Lint only the admin app. |
-| `pnpm ssr:website` | Run the built website SSR server. |
-| `pnpm ssr:admin` | Run the built admin SSR server. |
+| Command              | Description                                  |
+| -------------------- | -------------------------------------------- |
+| `pnpm dev:website`   | Start the website dev server on port `4200`. |
+| `pnpm dev:admin`     | Start the admin dev server on port `4300`.   |
+| `pnpm build`         | Build both applications.                     |
+| `pnpm build:website` | Build only the website app.                  |
+| `pnpm build:admin`   | Build only the admin app.                    |
+| `pnpm lint`          | Lint both applications.                      |
+| `pnpm ssr:website`   | Run the built website SSR server.            |
+| `pnpm ssr:admin`     | Run the built admin SSR server.              |
 
 Build the target app before running an `ssr:*` command.
 
