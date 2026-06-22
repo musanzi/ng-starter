@@ -12,7 +12,7 @@ import { AuthStore } from '@website/app/auth/data-access';
   imports: [MatButton, MatDivider, MatIcon, MatFormFieldModule, MatInputModule, FormField],
   templateUrl: './security.html'
 })
-export class PorfilSecurity {
+export class ProfileSecurity {
   protected readonly authStore = inject(AuthStore);
 
   protected securitySettingsModel = signal({

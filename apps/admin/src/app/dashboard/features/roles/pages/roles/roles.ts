@@ -14,9 +14,9 @@ import { MatTableModule } from '@angular/material/table';
 import { ConfirmDialog } from '@admin/app/dashboard/ui/confirm-dialog/confirm-dialog';
 import { IRole } from '@libs/utils';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { RolesStore } from '../data-access';
-import { IRoleQuery, IRolePayload } from '../interfaces';
-import { RoleFormDialog } from '../ui/role-form-dialog';
+import { RolesStore } from '../../data-access';
+import { IRoleQuery, IRolePayload } from '../../interfaces';
+import { RoleFormDialog } from '../../ui/role-form-dialog/role-form-dialog';
 
 const DEFAULT_LIMIT = 20;
 const MAX_LIMIT = 100;
@@ -91,7 +91,7 @@ export class Roles {
           return;
         }
 
-        this.rolesStore.saveRole({ payload, query: this.query });
+        this.rolesStore.createRole({ payload, query: this.query });
       });
   }
 
@@ -128,7 +128,7 @@ export class Roles {
           return;
         }
 
-        this.rolesStore.saveRole({ payload, query: this.query, roleId: role.id });
+        this.rolesStore.createRole({ payload, query: this.query, roleId: role.id });
       });
   }
 

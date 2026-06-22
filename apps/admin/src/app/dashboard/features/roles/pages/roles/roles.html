@@ -68,13 +68,13 @@
         </div>
       </div>
     </mat-card-content>
-
-    <mat-paginator
-      [length]="rolesStore.total()"
-      [pageIndex]="query.page - 1"
-      [pageSize]="query.limit"
-      [pageSizeOptions]="[20, 50, 100]"
-      (page)="pageChanged($event)"
-      showFirstLastButtons />
   </mat-card>
+
+  <mat-paginator
+    [length]="rolesStore.total()"
+    [pageIndex]="query.page - 1"
+    [pageSize]="query.limit"
+    [pageSizeOptions]="[20, 50, 100]"
+    (page)="pageChanged($event)"
+    showFirstLastButtons />
 </section>

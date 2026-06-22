@@ -1,15 +1,10 @@
 import { computed, inject } from '@angular/core';
-import { getApiErrorMessage } from '@libs/utils';
+import { decrementTotal, getApiErrorMessage, matchesQuery } from '@libs/utils';
 import { patchState, signalStore, withComputed, withMethods, withProps, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { catchError, exhaustMap, finalize, of, pipe, tap } from 'rxjs';
-import { IRoleQuery, IRolesState, ISaveRolePayload } from '../interfaces';
+import { IDeleteRolePayload, IRoleQuery, IRolesState, ISaveRolePayload } from '../interfaces';
 import { RolesService } from './roles.service';
-
-interface IDeleteRolePayload {
-  query: IRoleQuery;
-  roleId: string;
-}
 
 const initialState: IRolesState = {
   data: [[], 0],
@@ -43,20 +38,21 @@ export const RolesStore = signalStore(
           )
         )
       )
-    )
-  })),
-  withMethods(({ loadRoles, rolesService, ...store }) => ({
-    clearMessages(): void {
-      patchState(store, { error: null, success: null });
-    },
+    ),
     deleteRole: rxMethod<IDeleteRolePayload>(
       pipe(
         tap(() => patchState(store, { error: null, success: null })),
-        exhaustMap(({ query, roleId }) =>
+        exhaustMap(({ roleId }) =>
           rolesService.delete(roleId).pipe(
             tap(() => {
-              patchState(store, { success: 'Rôle supprimé.' });
-              loadRoles(query);
+              const [roles, total] = store.data();
+              const nextRoles = roles.filter((role) => role.id !== roleId);
+              const wasDeleted = nextRoles.length !== roles.length;
+
+              patchState(store, {
+                data: [nextRoles, wasDeleted ? decrementTotal(total) : total],
+                success: 'Rôle supprimé.'
+              });
             }),
             catchError((error: Error) => {
               patchState(store, { error: getApiErrorMessage(error, 'Impossible de supprimer le rôle') });
@@ -66,16 +62,33 @@ export const RolesStore = signalStore(
         )
       )
     ),
-    saveRole: rxMethod<ISaveRolePayload>(
+    createRole: rxMethod<ISaveRolePayload>(
       pipe(
         tap(() => patchState(store, { error: null, success: null })),
         exhaustMap(({ payload, query, roleId }) => {
           const request = roleId ? rolesService.update(roleId, payload) : rolesService.create(payload);
-
           return request.pipe(
-            tap(() => {
-              patchState(store, { success: roleId ? 'Rôle modifié.' : 'Rôle créé.' });
-              loadRoles(query);
+            tap((savedRole) => {
+              const [roles, total] = store.data();
+
+              if (roleId) {
+                const roleExists = roles.some((role) => role.id === roleId);
+                const nextRoles = matchesQuery(savedRole, query)
+                  ? roles.map((role) => (role.id === roleId ? savedRole : role))
+                  : roles.filter((role) => role.id !== roleId);
+
+                patchState(store, {
+                  data: [nextRoles, roleExists && !matchesQuery(savedRole, query) ? decrementTotal(total) : total],
+                  success: 'Rôle modifié.'
+                });
+
+                return;
+              }
+
+              patchState(store, {
+                data: matchesQuery(savedRole, query) ? [[savedRole, ...roles], total + 1] : [roles, total],
+                success: 'Rôle créé.'
+              });
             }),
             catchError((error: Error) => {
               patchState(store, {
@@ -89,6 +102,9 @@ export const RolesStore = signalStore(
           );
         })
       )
-    )
+    ),
+    clearMessages(): void {
+      patchState(store, { error: null, success: null });
+    }
   }))
 );

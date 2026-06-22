@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { createParams, IRole } from '@libs/utils';
 import { Observable } from 'rxjs';
 import { IRolePayload, IRoleQuery } from '../interfaces';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class RolesService {
   private readonly http = inject(HttpClient);
 

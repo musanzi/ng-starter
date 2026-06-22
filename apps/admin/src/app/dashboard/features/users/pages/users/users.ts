@@ -13,9 +13,9 @@ import { MatTableModule } from '@angular/material/table';
 import { RolesStore } from '@admin/app/dashboard/features/roles/data-access';
 import { ConfirmDialog } from '@admin/app/dashboard/ui/confirm-dialog/confirm-dialog';
 import { IRole, IUser } from '@libs/utils';
-import { UsersStore } from '../data-access';
-import { IUserPayload, IUserQuery } from '../interfaces';
-import { UserFormDialog } from '../ui/user-form-dialog/user-form-dialog';
+import { UsersStore } from '../../data-access';
+import { IUserPayload, IUserQuery } from '../../interfaces';
+import { UserFormDialog } from '../../ui/user-form-dialog/user-form-dialog';
 
 const DEFAULT_LIMIT = 20;
 const MAX_LIMIT = 100;

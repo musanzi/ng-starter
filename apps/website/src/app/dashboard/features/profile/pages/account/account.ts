@@ -16,7 +16,7 @@ const ALLOWED_AVATAR_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gi
   imports: [MatButton, MatDivider, MatIcon, MatFormFieldModule, MatInputModule, FormField],
   templateUrl: './account.html'
 })
-export class ProfilAccount {
+export class ProfileAccount {
   protected readonly authStore = inject(AuthStore);
 
   protected readonly avatarUrl = computed(() => getProfileAvatarUrl(this.authStore.user()?.avatar));

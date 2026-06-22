@@ -14,12 +14,12 @@ export const profileRoutes: Routes = [
       {
         path: 'account',
         title: 'Account',
-        loadComponent: () => import('./account/account').then((c) => c.ProfilAccount)
+        loadComponent: () => import('./pages/account/account').then((c) => c.ProfileAccount)
       },
       {
         path: 'security',
         title: 'Security',
-        loadComponent: () => import('./security/security').then((c) => c.PorfilSecurity)
+        loadComponent: () => import('./pages/security/security').then((c) => c.ProfileSecurity)
       }
     ]
   }
