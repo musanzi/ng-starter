@@ -1,5 +1,6 @@
 services:
   website:
+    image: starter-website
     build:
       context: .
       target: development
@@ -12,6 +13,7 @@ services:
       - /app/node_modules
 
   admin:
+    image: starter-admin
     build:
       context: .
       target: development

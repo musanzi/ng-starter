@@ -6,6 +6,7 @@
   "license": "https://themeforest.net/licenses/standard",
   "author": "Wilfried M <musanziw.m@gmail.com>",
   "scripts": {
+    "nx": "nx",
     "lint": "nx run-many -t lint --fix -p website admin",
     "build": "nx run-many -t build -p website admin",
     "dev:admin": "nx serve admin --port=4300",

@@ -1,5 +1,6 @@
 services:
   website:
+    image: starter-admin
     build:
       context: .
       target: production
@@ -9,6 +10,7 @@ services:
       - '4200:4200'
 
   admin:
+    image: starter-admin
     build:
       context: .
       target: production
