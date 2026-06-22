@@ -1,10 +1,10 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { IUser } from '@libs/utils';
+import { HttpClient } from '@angular/common/http';
+import { inject, Service } from '@angular/core';
+import { createParams, IUser } from '@libs/utils';
 import { Observable } from 'rxjs';
 import { IUserPayload, IUserQuery } from '../interfaces';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class UsersService {
   private readonly http = inject(HttpClient);
 
@@ -18,13 +18,13 @@ export class UsersService {
 
   exportCsv(query: IUserQuery): Observable<Blob> {
     return this.http.get('/users/export/csv', {
-      params: this.createParams(query),
+      params: createParams(query),
       responseType: 'blob'
     });
   }
 
   findAll(query: IUserQuery): Observable<[IUser[], number]> {
-    return this.http.get<[IUser[], number]>('/users', { params: this.createParams(query) });
+    return this.http.get<[IUser[], number]>('/users', { params: createParams(query) });
   }
 
   findOneByEmail(email: string): Observable<IUser> {
@@ -39,17 +39,5 @@ export class UsersService {
 
   update(userId: string, dto: IUserPayload): Observable<IUser> {
     return this.http.patch<IUser>(`/users/${userId}`, dto);
-  }
-
-  private createParams(query: IUserQuery): HttpParams {
-    let params = new HttpParams();
-
-    Object.entries(query).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== '') {
-        params = params.set(key, String(value));
-      }
-    });
-
-    return params;
   }
 }

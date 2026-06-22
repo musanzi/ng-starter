@@ -9,7 +9,7 @@ export const dashboardRoutes: Route[] = [
   {
     path: 'roles',
     title: 'Rôles',
-    loadComponent: () => import('./roles/roles').then((c) => c.Roles)
+    loadComponent: () => import('./roles/features/roles').then((c) => c.Roles)
   },
   {
     path: 'users',

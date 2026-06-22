@@ -1,7 +1,7 @@
 import { computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { getApiErrorMessage, IUser } from '@libs/utils';
-import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
+import { patchState, signalStore, withComputed, withMethods, withProps, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { catchError, exhaustMap, finalize, of, pipe, tap } from 'rxjs';
 import {
@@ -29,12 +29,16 @@ export const AuthStore = signalStore(
   withComputed(({ user }) => ({
     isAuthenticated: computed(() => user() !== null)
   })),
-  withMethods((store, _authService = inject(AuthService), router = inject(Router)) => ({
+  withProps(() => ({
+    authService: inject(AuthService),
+    router: inject(Router)
+  })),
+  withMethods(({ authService, router, ...store }) => ({
     updateProfile: rxMethod<IUpdateProfilePayload>(
       pipe(
         tap(() => patchState(store, { isLoading: true, error: null, success: null })),
         exhaustMap((payload) =>
-          _authService.updateProfile(payload).pipe(
+          authService.updateProfile(payload).pipe(
             tap((user) => {
               patchState(store, { user, success: 'Informations du compte mises à jour.' });
             }),
@@ -53,7 +57,7 @@ export const AuthStore = signalStore(
       pipe(
         tap(() => patchState(store, { isLoading: true, error: null, success: null })),
         exhaustMap((file) =>
-          _authService.updateAvatar(file).pipe(
+          authService.updateAvatar(file).pipe(
             tap((user) => {
               patchState(store, { user, success: 'Photo de profil mise à jour.' });
             }),
@@ -72,7 +76,7 @@ export const AuthStore = signalStore(
       pipe(
         tap(() => patchState(store, { isLoading: true, error: null, success: null })),
         exhaustMap((payload) =>
-          _authService.updatePassword(payload).pipe(
+          authService.updatePassword(payload).pipe(
             tap(() => patchState(store, { success: 'Mot de passe mis à jour.' })),
             catchError((error: Error) => {
               patchState(store, {
@@ -89,7 +93,7 @@ export const AuthStore = signalStore(
       pipe(
         tap(() => patchState(store, { isLoading: true, error: null })),
         exhaustMap((dto) =>
-          _authService.signUp(dto).pipe(
+          authService.signUp(dto).pipe(
             tap((user) => {
               console.log(user);
               patchState(store, { user });
@@ -108,7 +112,7 @@ export const AuthStore = signalStore(
       pipe(
         tap(() => patchState(store, { isLoading: true, error: null })),
         exhaustMap((dto) =>
-          _authService.signIn(dto).pipe(
+          authService.signIn(dto).pipe(
             tap((user) => {
               patchState(store, { user });
               router.navigateByUrl('/');
@@ -126,7 +130,7 @@ export const AuthStore = signalStore(
       pipe(
         tap(() => patchState(store, { isLoading: true, error: null })),
         exhaustMap(() =>
-          _authService.signOut().pipe(
+          authService.signOut().pipe(
             tap(() => {
               patchState(store, { user: null });
               router.navigateByUrl('/auth/sign-in');
@@ -144,7 +148,7 @@ export const AuthStore = signalStore(
       pipe(
         tap(() => patchState(store, { isLoading: true, error: null })),
         exhaustMap((payload) =>
-          _authService.forgotPassword(payload).pipe(
+          authService.forgotPassword(payload).pipe(
             tap(() => router.navigateByUrl('/auth/forgot-password/sent')),
             catchError((error: Error) => {
               patchState(store, {
@@ -161,7 +165,7 @@ export const AuthStore = signalStore(
       pipe(
         tap(() => patchState(store, { isLoading: true, error: null })),
         exhaustMap((payload) =>
-          _authService.resetPassword(payload).pipe(
+          authService.resetPassword(payload).pipe(
             tap(() =>
               router.navigateByUrl('/auth/sign-in', {
                 state: { successMessage: 'Votre mot de passe a été réinitialisé. Vous pouvez vous connecter.' }
@@ -180,7 +184,7 @@ export const AuthStore = signalStore(
       pipe(
         tap(() => patchState(store, { isVerifying: true, error: null })),
         exhaustMap(() =>
-          _authService.getProfile().pipe(
+          authService.getProfile().pipe(
             tap((user) => patchState(store, { user })),
             catchError(() => {
               patchState(store, { user: null });

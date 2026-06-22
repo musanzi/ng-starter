@@ -37,16 +37,16 @@ export interface RoleFormDialogData {
   `
 })
 export class RoleFormDialog {
-  private readonly data = inject<RoleFormDialogData>(MAT_DIALOG_DATA);
+  private readonly data = inject<RoleFormDialogData | null>(MAT_DIALOG_DATA, { optional: true });
   private readonly dialogRef = inject(MatDialogRef<RoleFormDialog, IRolePayload>);
 
   protected readonly roleFormModel = signal({
-    name: this.data.role?.name ?? ''
+    name: this.data?.role?.name ?? ''
   });
   protected readonly roleForm = form(this.roleFormModel, (form) => {
     required(form.name, { message: 'Le nom est obligatoire.' });
   });
-  protected readonly isEdit = computed(() => Boolean(this.data.role));
+  protected readonly isEdit = computed(() => Boolean(this.data?.role));
 
   save(event: Event): void {
     event.preventDefault();

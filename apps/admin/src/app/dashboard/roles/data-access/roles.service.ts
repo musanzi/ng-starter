@@ -1,6 +1,6 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { IRole } from '@libs/utils';
+import { createParams, IRole } from '@libs/utils';
 import { Observable } from 'rxjs';
 import { IRolePayload, IRoleQuery } from '../interfaces';
 
@@ -17,7 +17,7 @@ export class RolesService {
   }
 
   findAll(query: IRoleQuery): Observable<[IRole[], number]> {
-    return this.http.get<[IRole[], number]>('/roles', { params: this.createParams(query) });
+    return this.http.get<[IRole[], number]>('/roles', { params: createParams(query) });
   }
 
   findOne(roleId: string): Observable<IRole> {
@@ -26,17 +26,5 @@ export class RolesService {
 
   update(roleId: string, dto: IRolePayload): Observable<IRole> {
     return this.http.patch<IRole>(`/roles/${roleId}`, dto);
-  }
-
-  private createParams(query: IRoleQuery): HttpParams {
-    let params = new HttpParams();
-
-    Object.entries(query).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== '') {
-        params = params.set(key, String(value));
-      }
-    });
-
-    return params;
   }
 }

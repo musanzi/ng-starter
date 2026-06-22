@@ -1,6 +1,6 @@
 import { IRole, IUser } from '@libs/utils';
 
-export interface IUserFormDialogData {
+export interface IUserFormDialog {
   roles: IRole[];
   user?: IUser;
 }

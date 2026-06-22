@@ -1,7 +1,8 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, DestroyRef, effect, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
+import { MatButtonModule, MatIconButton } from '@angular/material/button';
+import { MatCard, MatCardContent, MatCardHeader } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,22 +11,27 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
-import { getApiErrorMessage, IRole } from '@libs/utils';
-import { debounceTime, distinctUntilChanged, finalize } from 'rxjs';
-import { ConfirmDialog } from '../shared/ui/confirm-dialog';
-import { RolesService } from './data-access';
-import { IRolePayload } from './interfaces';
-import { RoleFormDialog } from './ui/role-form-dialog';
+import { IRole } from '@libs/utils';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { ConfirmDialog } from '../../shared/ui/confirm-dialog';
+import { RolesStore } from '../data-access';
+import { IRoleQuery, IRolePayload } from '../interfaces';
+import { RoleFormDialog } from '../ui/role-form-dialog';
 
 const DEFAULT_LIMIT = 20;
 const MAX_LIMIT = 100;
 
 @Component({
   selector: 'admin-roles',
+  providers: [RolesStore],
   imports: [
     MatButtonModule,
+    MatCard,
+    MatCardContent,
+    MatCardHeader,
     MatFormFieldModule,
     MatIconModule,
+    MatIconButton,
     MatInputModule,
     MatPaginatorModule,
     MatProgressSpinnerModule,
@@ -37,26 +43,42 @@ const MAX_LIMIT = 100;
 export class Roles {
   private readonly destroyRef = inject(DestroyRef);
   private readonly dialog = inject(MatDialog);
-  private readonly rolesService = inject(RolesService);
   private readonly snackBar = inject(MatSnackBar);
 
   protected readonly displayedColumns = ['name', 'actions'];
-  protected readonly isLoading = signal(false);
-  protected readonly limit = signal(DEFAULT_LIMIT);
-  protected readonly page = signal(1);
-  protected readonly roles = signal<IRole[]>([]);
+  protected readonly query = {
+    limit: DEFAULT_LIMIT,
+    page: 1,
+    q: ''
+  } satisfies IRoleQuery;
+  protected readonly rolesStore = inject(RolesStore);
   protected readonly searchControl = new FormControl('', { nonNullable: true });
-  protected readonly total = signal(0);
 
   constructor() {
     this.searchControl.valueChanges
       .pipe(debounceTime(300), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
-        this.page.set(1);
+        this.query.page = 1;
+        this.query.q = this.searchControl.value.trim();
         this.loadRoles();
       });
 
     this.loadRoles();
+
+    effect(() => {
+      const error = this.rolesStore.error();
+      const success = this.rolesStore.success();
+
+      if (error) {
+        this.snackBar.open(error, 'Fermer', { duration: 5000 });
+        queueMicrotask(() => this.rolesStore.clearMessages());
+      }
+
+      if (success) {
+        this.snackBar.open(success, 'Fermer', { duration: 3000 });
+        queueMicrotask(() => this.rolesStore.clearMessages());
+      }
+    });
   }
 
   protected createRole(): void {
@@ -69,13 +91,7 @@ export class Roles {
           return;
         }
 
-        this.rolesService.create(payload).subscribe({
-          next: () => {
-            this.snackBar.open('Rôle créé.', 'Fermer', { duration: 3000 });
-            this.loadRoles();
-          },
-          error: (error: Error) => this.showError(error, 'Impossible de créer le rôle')
-        });
+        this.rolesStore.saveRole({ payload, query: this.query });
       });
   }
 
@@ -95,13 +111,7 @@ export class Roles {
           return;
         }
 
-        this.rolesService.delete(role.id).subscribe({
-          next: () => {
-            this.snackBar.open('Rôle supprimé.', 'Fermer', { duration: 3000 });
-            this.loadRoles();
-          },
-          error: (error: Error) => this.showError(error, 'Impossible de supprimer le rôle')
-        });
+        this.rolesStore.deleteRole({ query: this.query, roleId: role.id });
       });
   }
 
@@ -118,48 +128,22 @@ export class Roles {
           return;
         }
 
-        this.rolesService.update(role.id, payload).subscribe({
-          next: () => {
-            this.snackBar.open('Rôle modifié.', 'Fermer', { duration: 3000 });
-            this.loadRoles();
-          },
-          error: (error: Error) => this.showError(error, 'Impossible de modifier le rôle')
-        });
+        this.rolesStore.saveRole({ payload, query: this.query, roleId: role.id });
       });
   }
 
   protected loadRoles(): void {
-    const limit = Math.min(this.limit(), MAX_LIMIT);
-    this.limit.set(limit);
-    this.isLoading.set(true);
-
-    this.rolesService
-      .findAll({
-        page: this.page(),
-        limit,
-        q: this.searchControl.value.trim()
-      })
-      .pipe(finalize(() => this.isLoading.set(false)), takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: ([roles, total]) => {
-          this.roles.set(roles);
-          this.total.set(total);
-        },
-        error: (error: Error) => this.showError(error, 'Impossible de charger les rôles')
-      });
+    this.query.limit = Math.min(Number(this.query.limit), MAX_LIMIT);
+    this.rolesStore.loadRoles(this.query);
   }
 
   protected pageChanged(event: PageEvent): void {
-    this.page.set(event.pageIndex + 1);
-    this.limit.set(Math.min(event.pageSize, MAX_LIMIT));
+    this.query.page = event.pageIndex + 1;
+    this.query.limit = Math.min(event.pageSize, MAX_LIMIT);
     this.loadRoles();
   }
 
   protected trackBy(_: number, role: IRole): string {
     return role.id;
-  }
-
-  private showError(error: Error, fallback: string): void {
-    this.snackBar.open(getApiErrorMessage(error, fallback), 'Fermer', { duration: 5000 });
   }
 }

@@ -12,11 +12,9 @@ import { IUser } from '@libs/utils';
   template: `
     <button
       class="flex w-full cursor-pointer items-center gap-x-3 rounded-xl p-2 text-left hover:bg-neutral-700/10 dark:hover:bg-neutral-300/10"
-      [matMenuTriggerFor]="userMenu"
-    >
+      [matMenuTriggerFor]="userMenu">
       <div
-        class="flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-neutral-100 text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400"
-      >
+        class="flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-neutral-100 text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400">
         @if (avatarUrl(); as avatar) {
           <img class="size-full object-cover" [src]="avatar" alt="Photo de profil" />
         } @else {
@@ -31,23 +29,6 @@ import { IUser } from '@libs/utils';
     </button>
 
     <mat-menu class="min-w-60" xPosition="before" yPosition="above" #userMenu="matMenu">
-      <button class="py-2 [&>span]:flex [&>span]:items-center" mat-menu-item>
-        <div
-          class="flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-neutral-100 text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400"
-        >
-          @if (avatarUrl(); as avatar) {
-            <img class="size-full object-cover" [src]="avatar" alt="Photo de profil" />
-          } @else {
-            <mat-icon svgIcon="user"></mat-icon>
-          }
-        </div>
-        <div class="ml-3 flex min-w-0 flex-auto flex-col select-none">
-          <div class="truncate font-medium">{{ user()?.name }}</div>
-          <div class="text-on-surface-variant truncate text-sm">{{ user()?.email }}</div>
-        </div>
-      </button>
-      <mat-divider />
-      <mat-divider />
       <button mat-menu-item [matMenuTriggerFor]="appearanceMenu">
         <mat-icon svgIcon="sun-moon" />
         Apparence
@@ -65,8 +46,7 @@ import { IUser } from '@libs/utils';
           <mat-pseudo-checkbox
             appearance="minimal"
             class="mr-2"
-            [state]="scheme() === item.value ? 'checked' : 'unchecked'"
-          />
+            [state]="scheme() === item.value ? 'checked' : 'unchecked'" />
           <span>{{ item.label }}</span>
         </button>
       }

@@ -4,21 +4,25 @@ import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatCard, MatCardHeader, MatCardContent } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
-import { MatDivider } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
-import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
+import { RolesStore } from '../../roles/data-access';
 import { ConfirmDialog } from '../../shared/ui/confirm-dialog';
 import { IRole, IUser } from '@libs/utils';
 import { UsersStore } from '../data-access';
-import { IUserPayload } from '../interfaces';
+import { IUserPayload, IUserQuery } from '../interfaces';
 import { UserFormDialog } from '../ui/user-form-dialog/user-form-dialog';
+
+const DEFAULT_LIMIT = 20;
+const MAX_LIMIT = 100;
 
 @Component({
   selector: 'admin-users',
+  providers: [RolesStore, UsersStore],
   imports: [
     MatButtonModule,
     MatChipsModule,
@@ -30,7 +34,7 @@ import { UserFormDialog } from '../ui/user-form-dialog/user-form-dialog';
     MatCardHeader,
     MatCardContent,
     MatMenu,
-    MatDivider,
+    MatMenuItem,
     MatMenuTrigger,
     MatIconButton
   ],
@@ -43,11 +47,16 @@ export class Users {
 
   protected readonly displayedColumns = ['name', 'email', 'roles', 'actions'];
   protected readonly fileInput = viewChild<ElementRef<HTMLInputElement>>('fileInput');
+  protected readonly query = {
+    limit: DEFAULT_LIMIT,
+    page: 1
+  } satisfies IUserQuery;
+  protected readonly rolesStore = inject(RolesStore);
   protected readonly usersStore = inject(UsersStore);
 
   constructor() {
-    this.usersStore.loadRoles();
-    this.usersStore.loadUsers();
+    this.rolesStore.loadRoles({ limit: MAX_LIMIT, page: 1 });
+    this.usersStore.loadUsers(this.query);
 
     effect(() => {
       const error = this.usersStore.error();
@@ -61,6 +70,15 @@ export class Users {
       if (success) {
         this.snackBar.open(success, 'Fermer', { duration: 3000 });
         queueMicrotask(() => this.usersStore.clearMessages());
+      }
+    });
+
+    effect(() => {
+      const error = this.rolesStore.error();
+
+      if (error) {
+        this.snackBar.open(error, 'Fermer', { duration: 5000 });
+        queueMicrotask(() => this.rolesStore.clearMessages());
       }
     });
   }
@@ -85,7 +103,7 @@ export class Users {
           return;
         }
 
-        this.usersStore.deleteUser(user.id);
+        this.usersStore.deleteUser({ query: this.query, userId: user.id });
       });
   }
 
@@ -94,7 +112,7 @@ export class Users {
   }
 
   protected exportCsv(): void {
-    this.usersStore.exportCsv();
+    this.usersStore.exportCsv(this.query);
   }
 
   protected importCsv(event: Event): void {
@@ -105,7 +123,7 @@ export class Users {
     }
 
     input.value = '';
-    this.usersStore.importCsv(file);
+    this.usersStore.importCsv({ file, query: this.query });
   }
 
   protected openFilePicker(): void {
@@ -113,13 +131,13 @@ export class Users {
   }
 
   protected pageChanged(event: PageEvent): void {
-    this.usersStore.setPage(event.pageIndex + 1);
-    this.usersStore.setPageSize(event.pageSize);
-    this.usersStore.loadUsers();
+    this.query.page = event.pageIndex + 1;
+    this.query.limit = Math.min(event.pageSize, MAX_LIMIT);
+    this.usersStore.loadUsers(this.query);
   }
 
   protected roleLabel(role: string): string {
-    return this.usersStore.rolesById().get(role) ?? role;
+    return this.rolesStore.rolesById().get(role) ?? role;
   }
 
   protected trackBy(_: number, user: IUser): string {
@@ -129,7 +147,7 @@ export class Users {
   private openUserDialog(user?: IUser): void {
     this.dialog
       .open<UserFormDialog, { roles: IRole[]; user?: IUser }, IUserPayload>(UserFormDialog, {
-        data: { roles: this.usersStore.roles(), user },
+        data: { roles: this.rolesStore.roles(), user },
         width: '560px'
       })
       .afterClosed()
@@ -139,7 +157,7 @@ export class Users {
           return;
         }
 
-        this.usersStore.saveUser({ payload, userId: user?.id });
+        this.usersStore.saveUser({ payload, query: this.query, userId: user?.id });
       });
   }
 }

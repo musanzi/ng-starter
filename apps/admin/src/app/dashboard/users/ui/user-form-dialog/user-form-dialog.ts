@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { IUserPayload, IUserFormDialogData } from '../../interfaces';
+import { IUserPayload, IUserFormDialog } from '../../interfaces';
 
 @Component({
   selector: 'admin-user-form-dialog',
@@ -22,7 +22,7 @@ import { IUserPayload, IUserFormDialogData } from '../../interfaces';
   templateUrl: './user-form-dialog.html'
 })
 export class UserFormDialog {
-  protected readonly data = inject<IUserFormDialogData>(MAT_DIALOG_DATA);
+  protected readonly data = inject<IUserFormDialog>(MAT_DIALOG_DATA);
   private readonly dialogRef = inject(MatDialogRef<UserFormDialog, IUserPayload>);
 
   protected readonly userFormModel = signal({
