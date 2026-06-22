@@ -7,7 +7,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { RolesStore } from '@admin/app/dashboard/features/roles/data-access';
@@ -28,7 +27,6 @@ const MAX_LIMIT = 100;
     MatChipsModule,
     MatIconModule,
     MatPaginatorModule,
-    MatProgressSpinnerModule,
     MatTableModule,
     MatCard,
     MatCardHeader,
@@ -103,7 +101,7 @@ export class Users {
           return;
         }
 
-        this.usersStore.deleteUser({ query: this.query, userId: user.id });
+        this.usersStore.deleteUser({ userId: user.id });
       });
   }
 

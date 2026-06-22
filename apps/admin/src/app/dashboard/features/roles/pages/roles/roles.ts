@@ -8,7 +8,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { ConfirmDialog } from '@admin/app/dashboard/ui/confirm-dialog/confirm-dialog';
@@ -34,7 +33,6 @@ const MAX_LIMIT = 100;
     MatIconButton,
     MatInputModule,
     MatPaginatorModule,
-    MatProgressSpinnerModule,
     MatTableModule,
     ReactiveFormsModule
   ],
@@ -111,7 +109,7 @@ export class Roles {
           return;
         }
 
-        this.rolesStore.deleteRole({ query: this.query, roleId: role.id });
+        this.rolesStore.deleteRole({ roleId: role.id });
       });
   }
 
