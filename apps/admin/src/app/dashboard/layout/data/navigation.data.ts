@@ -3,24 +3,24 @@ import { INavigationItem } from '@libs/utils';
 export const NAVIGATION: INavigationItem[] = [
   {
     id: 'general',
-    label: 'Géneral',
-    description: 'Gestion des ressources',
+    label: 'admin.navigation.general.label',
+    description: 'admin.navigation.general.description',
     children: [
       {
         id: 'dashboard',
-        label: 'Dashboard',
+        label: 'admin.navigation.general.dashboard',
         route: '/',
         icon: 'layout-dashboard'
       },
       {
         id: 'roles',
-        label: 'Rôles',
+        label: 'admin.navigation.general.roles',
         route: '/roles',
         icon: 'shield-check'
       },
       {
         id: 'users',
-        label: 'Utilisateurs',
+        label: 'admin.navigation.general.users',
         route: '/users',
         icon: 'users'
       }

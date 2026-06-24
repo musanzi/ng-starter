@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { MatIconButton } from '@angular/material/button';
 import { MatPseudoCheckbox } from '@angular/material/core';
 import { MatIcon } from '@angular/material/icon';
@@ -13,7 +13,7 @@ import { Scheme, Theming } from '@libs/core';
       <mat-icon svgIcon="sun-moon" />
     </button>
     <mat-menu #schemeMenu>
-      @for (item of schemes; track item.value) {
+      @for (item of schemes(); track item.value) {
         <button mat-menu-item (click)="updateScheme(item.value)">
           <span class="flex items-center gap-x-1">
             <span class="flex-auto">{{ item.label }}</span>
@@ -29,12 +29,17 @@ export class SchemeSwitcher {
   private theming = inject(Theming);
 
   // State
+  labels = input({
+    dark: 'Dark',
+    light: 'Light',
+    system: 'System'
+  });
   protected scheme = computed(() => this.theming.scheme());
-  protected schemes: { label: string; value: Scheme }[] = [
-    { label: 'Light', value: 'light' },
-    { label: 'Dark', value: 'dark' },
-    { label: 'System', value: 'system' }
-  ];
+  protected schemes = computed<{ label: string; value: Scheme }[]>(() => [
+    { label: this.labels().light, value: 'light' },
+    { label: this.labels().dark, value: 'dark' },
+    { label: this.labels().system, value: 'system' }
+  ]);
 
   updateScheme(scheme: Scheme) {
     this.theming.scheme.set(scheme);

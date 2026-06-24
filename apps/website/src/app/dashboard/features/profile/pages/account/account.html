@@ -1,8 +1,8 @@
 <form class="grid grid-cols-1 gap-5" (submit)="save($event)">
   <div class="col-span-full">
-    <div class="text-lg font-semibold">Informations du compte</div>
+    <div class="text-lg font-semibold">{{ 'profile.account.title' | transloco }}</div>
     <div class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-      Mettez à jour la photo, le nom et l'adresse e-mail associés à votre compte.
+      {{ 'profile.account.description' | transloco }}
     </div>
   </div>
 
@@ -10,15 +10,17 @@
     <div
       class="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-full border border-neutral-200 bg-neutral-100 text-neutral-500 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-400">
       @if (avatarUrl(); as avatar) {
-      <img class="h-full w-full object-cover" [src]="avatar" alt="Photo de profil" />
+      <img class="h-full w-full object-cover" [src]="avatar" [alt]="'profile.account.avatarAlt' | transloco" />
       } @else {
       <mat-icon class="icon-size-10" svgIcon="user"></mat-icon>
       }
     </div>
 
     <div class="min-w-0">
-      <div class="text-sm font-medium">Photo de profil</div>
-      <div class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">JPG, PNG, WebP ou GIF. 2 Mo maximum.</div>
+      <div class="text-sm font-medium">{{ 'profile.account.avatarTitle' | transloco }}</div>
+      <div class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+        {{ 'profile.account.avatarHint' | transloco }}
+      </div>
       <input
         class="hidden"
         type="file"
@@ -32,28 +34,28 @@
         [disabled]="authStore.isLoading()"
         (click)="avatarInput.click()">
         <mat-icon svgIcon="upload"></mat-icon>
-        {{ authStore.isLoading() ? 'Chargement...' : 'Changer la photo' }}
+        {{ (authStore.isLoading() ? 'common.loading' : 'profile.account.changeAvatar') | transloco }}
       </button>
     </div>
   </div>
 
   <mat-form-field class="w-full">
-    <mat-label>Nom</mat-label>
+    <mat-label>{{ 'form.name' | transloco }}</mat-label>
     <input matInput [formField]="accountSettingsForm.name" />
     <mat-icon svgIcon="user" matPrefix></mat-icon>
     @if ((accountSettingsForm.name().touched() || accountSettingsForm.name().dirty()) &&
     accountSettingsForm.name().errors()[0]; as error) {
-    <mat-error>{{ error.message }}</mat-error>
+    <mat-error>{{ error.message | transloco }}</mat-error>
     }
   </mat-form-field>
 
   <mat-form-field class="w-full">
-    <mat-label>Adresse e-mail</mat-label>
+    <mat-label>{{ 'form.email' | transloco }}</mat-label>
     <input matInput type="email" [formField]="accountSettingsForm.email" />
     <mat-icon svgIcon="mail" matPrefix></mat-icon>
     @if ((accountSettingsForm.email().touched() || accountSettingsForm.email().dirty()) &&
     accountSettingsForm.email().errors()[0]; as error) {
-    <mat-error>{{ error.message }}</mat-error>
+    <mat-error>{{ error.message | transloco }}</mat-error>
     }
   </mat-form-field>
 
@@ -73,7 +75,7 @@
 
   <div class="col-span-full flex justify-end">
     <button matButton="filled" [disabled]="accountSettingsForm().invalid() || authStore.isLoading()">
-      {{ authStore.isLoading() ? 'Enregistrement...' : 'Enregistrer' }}
+      {{ (authStore.isLoading() ? 'common.saving' : 'common.save') | transloco }}
     </button>
   </div>
 </form>

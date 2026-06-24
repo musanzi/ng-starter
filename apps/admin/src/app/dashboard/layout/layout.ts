@@ -4,7 +4,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
 import { RouterOutlet } from '@angular/router';
 import { Media } from '@libs/core';
-import { SchemeSwitcher } from '@libs/ui';
+import { LanguageSwitcher, SchemeSwitcher } from '@libs/ui';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { AdminSidebar } from './ui/sidebar';
 
 @Component({
@@ -17,7 +18,9 @@ import { AdminSidebar } from './ui/sidebar';
     MatSidenav,
     MatSidenavContent,
     AdminSidebar,
-    SchemeSwitcher
+    SchemeSwitcher,
+    LanguageSwitcher,
+    TranslocoPipe
   ],
   templateUrl: './layout.html'
 })

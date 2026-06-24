@@ -1,13 +1,13 @@
 <section class="flex flex-col gap-6 p-4 sm:p-6 lg:p-8">
   <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
     <div>
-      <h1 class="text-2xl font-semibold text-on-surface">Rôles</h1>
-      <p class="mt-1 text-sm text-on-surface-variant">Gérez les rôles disponibles pour les utilisateurs.</p>
+      <h1 class="text-2xl font-semibold text-on-surface">{{ 'admin.roles.title' | transloco }}</h1>
+      <p class="mt-1 text-sm text-on-surface-variant">{{ 'admin.roles.description' | transloco }}</p>
     </div>
 
     <button matButton="filled" (click)="createRole()">
       <mat-icon svgIcon="plus" />
-      Ajouter un rôle
+      {{ 'admin.roles.add' | transloco }}
     </button>
   </div>
 
@@ -16,12 +16,12 @@
       <div class="flex flex-auto flex-col gap-4 md:flex-row md:items-center">
         <div class="flex items-center gap-x-2">
           <mat-icon class="size-4" svgIcon="shield-check" />
-          <div class="font-medium tracking-tight">Liste des rôles</div>
+          <div class="font-medium tracking-tight">{{ 'admin.roles.list' | transloco }}</div>
         </div>
 
         <mat-form-field class="w-full md:ml-auto md:max-w-sm">
           <mat-icon matPrefix svgIcon="search" />
-          <input matInput [formControl]="searchControl" placeholder="Nom du rôle" />
+          <input matInput [formControl]="searchControl" [placeholder]="'admin.roles.searchPlaceholder' | transloco" />
         </mat-form-field>
       </div>
     </mat-card-header>
@@ -30,11 +30,11 @@
       <div class="flex flex-col">
         <div class="relative isolate overflow-x-visible overflow-y-hidden">
           @if (rolesStore.isLoading()) {
-          <div class="-mt-px min-w-full whitespace-nowrap" aria-busy="true" aria-label="Chargement des rôles">
+          <div class="-mt-px min-w-full whitespace-nowrap" aria-busy="true" [attr.aria-label]="'admin.roles.loading' | transloco">
             <div
               class="grid min-h-14 grid-cols-[minmax(14rem,1fr)_8rem] items-center border-b border-neutral-200 dark:border-neutral-800 px-6 text-xs font-medium uppercase tracking-wide text-on-surface-variant">
-              <div>Nom</div>
-              <div class="text-right">Actions</div>
+              <div>{{ 'form.name' | transloco }}</div>
+              <div class="text-right">{{ 'common.actions' | transloco }}</div>
             </div>
 
             <div class="divide-y divide-neutral-200 dark:divide-neutral-800">
@@ -56,17 +56,25 @@
 
           <table class="-mt-px whitespace-nowrap" mat-table [dataSource]="rolesStore.roles()" [trackBy]="trackBy">
             <ng-container matColumnDef="name">
-              <th mat-header-cell *matHeaderCellDef>Nom</th>
+              <th mat-header-cell *matHeaderCellDef>{{ 'form.name' | transloco }}</th>
               <td mat-cell *matCellDef="let role">{{ role.name }}</td>
             </ng-container>
 
             <ng-container matColumnDef="actions">
-              <th mat-header-cell *matHeaderCellDef class="w-32 text-right">Actions</th>
+              <th mat-header-cell *matHeaderCellDef class="w-32 text-right">{{ 'common.actions' | transloco }}</th>
               <td mat-cell *matCellDef="let role" class="text-right">
-                <button matIconButton type="button" aria-label="Modifier le rôle" (click)="editRole(role)">
+                <button
+                  matIconButton
+                  type="button"
+                  [attr.aria-label]="'admin.roles.edit' | transloco"
+                  (click)="editRole(role)">
                   <mat-icon svgIcon="pencil" />
                 </button>
-                <button matIconButton type="button" aria-label="Supprimer le rôle" (click)="deleteRole(role)">
+                <button
+                  matIconButton
+                  type="button"
+                  [attr.aria-label]="'admin.roles.delete.action' | transloco"
+                  (click)="deleteRole(role)">
                   <mat-icon svgIcon="trash-2" />
                 </button>
               </td>
@@ -81,7 +89,7 @@
 
           @if (!rolesStore.isLoading() && rolesStore.roles().length === 0) {
           <div class="flex min-h-32 items-center justify-center text-sm text-on-surface-variant">
-            Aucun rôle trouvé.
+            {{ 'admin.roles.empty' | transloco }}
           </div>
           } }
         </div>

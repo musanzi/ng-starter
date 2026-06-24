@@ -11,18 +11,24 @@
     </div>
 
     <div class="flex items-center gap-2">
-      <ui-scheme-switcher />
+      <ui-language-switcher />
+      <ui-scheme-switcher
+        [labels]="{
+          light: ('theme.light' | transloco),
+          dark: ('theme.dark' | transloco),
+          system: ('theme.system' | transloco)
+        }" />
 
       @if (userName(); as name) {
       <span class="hidden max-w-40 truncate text-sm font-medium text-neutral-600 sm:block dark:text-neutral-300">
-        Bonjour, {{ name }}
+        {{ 'common.greeting' | transloco: { name } }}
       </span>
-      <a matButton="outlined" routerLink="/dashboard">Tableau de bord</a>
+      <a matButton="outlined" routerLink="/dashboard">{{ 'common.dashboard' | transloco }}</a>
       <button matButton="filled" type="button" [disabled]="isLoading()" (click)="signOut.emit()">
-        {{ isLoading() ? 'Déconnexion...' : 'Se déconnecter' }}
+        {{ (isLoading() ? 'common.signingOut' : 'common.signOut') | transloco }}
       </button>
       } @else {
-      <a matButton="outlined" routerLink="/auth/sign-in">Se connecter</a>
+      <a matButton="outlined" routerLink="/auth/sign-in">{{ 'common.signIn' | transloco }}</a>
       }
     </div>
   </div>

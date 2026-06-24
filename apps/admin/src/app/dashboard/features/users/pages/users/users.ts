@@ -12,6 +12,7 @@ import { MatTableModule } from '@angular/material/table';
 import { RolesStore } from '@admin/app/dashboard/features/roles/data-access';
 import { ConfirmDialog } from '@admin/app/dashboard/ui/confirm-dialog/confirm-dialog';
 import { getProfileAvatarUrl } from '@admin/app/dashboard/utils';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { DEFAULT_LIMIT, IRole, IUser, MAX_LIMIT } from '@libs/utils';
 import { UsersStore } from '../../data-access';
 import { IUserPayload, IUserQuery } from '../../interfaces';
@@ -32,7 +33,8 @@ import { UserFormDialog } from '../../ui/user-form-dialog/user-form-dialog';
     MatMenu,
     MatMenuItem,
     MatMenuTrigger,
-    MatIconButton
+    MatIconButton,
+    TranslocoPipe
   ],
   templateUrl: './users.html'
 })
@@ -40,6 +42,7 @@ export class Users {
   private readonly destroyRef = inject(DestroyRef);
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly transloco = inject(TranslocoService);
 
   protected readonly displayedColumns = ['name', 'email', 'roles', 'actions'];
   protected readonly fileInput = viewChild<ElementRef<HTMLInputElement>>('fileInput');
@@ -59,12 +62,12 @@ export class Users {
       const success = this.usersStore.success();
 
       if (error) {
-        this.snackBar.open(error, 'Fermer', { duration: 5000 });
+        this.snackBar.open(error, this.transloco.translate('common.close'), { duration: 5000 });
         queueMicrotask(() => this.usersStore.clearMessages());
       }
 
       if (success) {
-        this.snackBar.open(success, 'Fermer', { duration: 3000 });
+        this.snackBar.open(success, this.transloco.translate('common.close'), { duration: 3000 });
         queueMicrotask(() => this.usersStore.clearMessages());
       }
     });
@@ -73,7 +76,7 @@ export class Users {
       const error = this.rolesStore.error();
 
       if (error) {
-        this.snackBar.open(error, 'Fermer', { duration: 5000 });
+        this.snackBar.open(error, this.transloco.translate('common.close'), { duration: 5000 });
         queueMicrotask(() => this.rolesStore.clearMessages());
       }
     });
@@ -87,8 +90,8 @@ export class Users {
     this.dialog
       .open<ConfirmDialog, unknown, boolean>(ConfirmDialog, {
         data: {
-          title: "Supprimer l'utilisateur",
-          message: `Voulez-vous supprimer l'utilisateur "${user.name}" ?`
+          title: this.transloco.translate('admin.users.delete.title'),
+          message: this.transloco.translate('admin.users.delete.message', { name: user.name })
         },
         width: '420px'
       })

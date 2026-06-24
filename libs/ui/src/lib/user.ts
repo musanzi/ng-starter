@@ -31,17 +31,17 @@ import { IUser } from '@libs/utils';
     <mat-menu class="min-w-60" xPosition="before" yPosition="above" #userMenu="matMenu">
       <button mat-menu-item [matMenuTriggerFor]="appearanceMenu">
         <mat-icon svgIcon="sun-moon" />
-        Apparence
+        {{ appearanceLabel() }}
       </button>
       <mat-divider />
       <button mat-menu-item (click)="handleSignOut()">
         <mat-icon svgIcon="log-out" />
-        Se déconnecter
+        {{ signOutLabel() }}
       </button>
     </mat-menu>
 
     <mat-menu #appearanceMenu="matMenu">
-      @for (item of schemes; track item.value) {
+      @for (item of schemes(); track item.value) {
         <button mat-menu-item (click)="updateScheme(item.value)">
           <mat-pseudo-checkbox
             appearance="minimal"
@@ -57,15 +57,22 @@ export class User {
   user = input.required<IUser | null>();
   avatarUrl = input.required<string | null>();
   signOut = output();
+  appearanceLabel = input('Apparence');
+  signOutLabel = input('Se déconnecter');
+  schemeLabels = input({
+    dark: 'Sombre',
+    light: 'Clair',
+    system: 'Systeme'
+  });
 
   private theming = inject(Theming);
 
   protected scheme = computed(() => this.theming.scheme());
-  protected schemes: { label: string; value: Scheme }[] = [
-    { label: 'Clair', value: 'light' },
-    { label: 'Sombre', value: 'dark' },
-    { label: 'Systeme', value: 'system' }
-  ];
+  protected schemes = computed<{ label: string; value: Scheme }[]>(() => [
+    { label: this.schemeLabels().light, value: 'light' },
+    { label: this.schemeLabels().dark, value: 'dark' },
+    { label: this.schemeLabels().system, value: 'system' }
+  ]);
 
   updateScheme(scheme: Scheme) {
     this.theming.scheme.set(scheme);

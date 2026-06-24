@@ -5,12 +5,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { AuthStore } from '../../data-access';
 
 @Component({
   selector: 'auth-reset-password',
   templateUrl: './reset-password.html',
-  imports: [RouterLink, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, FormField]
+  imports: [RouterLink, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, FormField, TranslocoPipe]
 })
 export class AuthResetPassword {
   private route = inject(ActivatedRoute);
@@ -22,10 +23,10 @@ export class AuthResetPassword {
     confirmPassword: ''
   });
   protected resetPasswordForm = form(this.resetPasswordFormModel, (form) => {
-    required(form.password, { message: 'Vous devez saisir un mot de passe' });
-    minLength(form.password, 6, { message: 'Le mot de passe doit contenir au moins 6 caractères' });
+    required(form.password, { message: 'validation.passwordRequired' });
+    minLength(form.password, 6, { message: 'validation.passwordMinLength' });
     required(form.confirmPassword, {
-      message: 'Vous devez confirmer votre mot de passe'
+      message: 'validation.confirmPasswordRequired'
     });
     validate(form.confirmPassword, (ctx) => {
       const password = ctx.valueOf(form.password);
@@ -36,7 +37,7 @@ export class AuthResetPassword {
       if (password !== confirmPassword) {
         return {
           kind: 'mismatch',
-          message: 'Les mots de passe ne correspondent pas'
+          message: 'validation.passwordMismatch'
         };
       }
 

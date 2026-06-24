@@ -5,6 +5,7 @@ import { MatDivider } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { AuthStore } from '@website/app/auth/data-access';
 import { getProfileAvatarUrl } from '@website/app/dashboard/utils/avatar-url';
 
@@ -13,18 +14,19 @@ const ALLOWED_AVATAR_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gi
 
 @Component({
   selector: 'account-settings',
-  imports: [MatButton, MatDivider, MatIcon, MatFormFieldModule, MatInputModule, FormField],
+  imports: [MatButton, MatDivider, MatIcon, MatFormFieldModule, MatInputModule, FormField, TranslocoPipe],
   templateUrl: './account.html'
 })
 export class ProfileAccount {
   protected readonly authStore = inject(AuthStore);
+  private readonly transloco = inject(TranslocoService);
 
   protected readonly avatarUrl = computed(() => getProfileAvatarUrl(this.authStore.user()?.avatar ?? null));
   protected accountSettingsModel = signal(this.getUserFormValue());
   protected accountSettingsForm = form(this.accountSettingsModel, (schema) => {
-    required(schema.name, { message: 'Le nom est obligatoire' });
-    required(schema.email, { message: "L'adresse e-mail est obligatoire" });
-    email(schema.email, { message: 'Adresse e-mail invalide' });
+    required(schema.name, { message: 'validation.nameRequired' });
+    required(schema.email, { message: 'validation.emailRequired' });
+    email(schema.email, { message: 'validation.emailInvalid' });
   });
 
   constructor() {
@@ -51,13 +53,13 @@ export class ProfileAccount {
     this.authStore.clearMessages();
 
     if (!ALLOWED_AVATAR_TYPES.includes(file.type)) {
-      this.authStore.setError('Format non pris en charge. Utilisez JPG, PNG, WebP ou GIF.');
+      this.authStore.setError(this.transloco.translate('profile.account.avatarTypeError'));
       input.value = '';
       return;
     }
 
     if (file.size > MAX_AVATAR_SIZE) {
-      this.authStore.setError('La photo de profil ne doit pas dépasser 2 Mo.');
+      this.authStore.setError(this.transloco.translate('profile.account.avatarSizeError'));
       input.value = '';
       return;
     }

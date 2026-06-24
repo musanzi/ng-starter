@@ -1,12 +1,12 @@
 <section class="flex flex-col gap-6 p-4 sm:p-6 lg:p-8">
   <div>
-    <h1 class="text-2xl font-semibold text-on-surface">Tableau de bord admin</h1>
-    <p class="mt-1 text-sm text-on-surface-variant">Consultez les statistiques principales de l'administration.</p>
+      <h1 class="text-2xl font-semibold text-on-surface">{{ 'admin.stats.title' | transloco }}</h1>
+      <p class="mt-1 text-sm text-on-surface-variant">{{ 'admin.stats.description' | transloco }}</p>
   </div>
 
   <div class="grid gap-4 sm:gap-6 max-md:grid-cols-1 md:grid-cols-4">
     @if (statsStore.isLoading()) { @for (item of [1, 2]; track item) {
-    <mat-card appearance="filled" aria-busy="true" aria-label="Chargement des statistiques">
+    <mat-card appearance="filled" aria-busy="true" [attr.aria-label]="'admin.stats.loading' | transloco">
       <mat-card-header>
         <div class="flex items-center gap-x-2">
           <mat-icon class="size-4" svgIcon="activity" />
@@ -34,7 +34,7 @@
 
   @if (!statsStore.isLoading() && statsStore.data().length === 0) {
   <div class="flex min-h-32 items-center justify-center text-sm text-on-surface-variant">
-    Aucune statistique trouvée.
+    {{ 'admin.stats.empty' | transloco }}
   </div>
   }
 </section>

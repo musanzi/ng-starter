@@ -5,29 +5,29 @@
         href="/"
         class="mb-4 inline-flex items-center cursor-pointer text-primary-700 dark:text-primary-500 self-start text-sm font-medium underline-offset-4 hover:underline">
         <mat-icon class="mr-1 size-4" svgIcon="arrow-left"></mat-icon>
-        Retour à l'accueil
+        {{ 'common.backHome' | transloco }}
       </a>
-      <div class="text-4xl leading-tight font-extrabold tracking-tight">Connexion</div>
+      <div class="text-4xl leading-tight font-extrabold tracking-tight">{{ 'auth.signIn.title' | transloco }}</div>
       <div class="mt-0.5 flex items-baseline font-medium">
-        <div class="text-neutral-500">Vous n'avez pas de compte ?</div>
+        <div class="text-neutral-500">{{ 'auth.signIn.noAccount' | transloco }}</div>
         <a class="ml-1 underline underline-offset-4 hover:underline text-primary-600" routerLink="/auth/sign-up">
-          S'inscrire
+          {{ 'common.signUp' | transloco }}
         </a>
       </div>
 
       <form class="mt-8" (submit)="signIn($event)">
         <div class="flex flex-col gap-y-4">
           <mat-form-field class="w-full">
-            <mat-label>Adresse e-mail</mat-label>
+            <mat-label>{{ 'form.email' | transloco }}</mat-label>
             <input id="email" matInput [formField]="signInForm.email" />
             @if ((signInForm.email().touched() || signInForm.email().dirty()) && signInForm.email().errors()[0]; as
             error) {
-            <mat-error>{{ error.message }}</mat-error>
+            <mat-error>{{ error.message | transloco }}</mat-error>
             }
           </mat-form-field>
 
           <mat-form-field appearance="fill" class="w-full">
-            <mat-label>Mot de passe</mat-label>
+            <mat-label>{{ 'form.password' | transloco }}</mat-label>
             <input id="password" matInput type="password" [formField]="signInForm.password" #passwordField />
             <button
               matIconButton
@@ -46,14 +46,14 @@
             </button>
             @if ((signInForm.password().touched() || signInForm.password().dirty()) &&
             signInForm.password().errors()[0]; as error) {
-            <mat-error>{{ error.message }}</mat-error>
+            <mat-error>{{ error.message | transloco }}</mat-error>
             }
           </mat-form-field>
         </div>
 
         <div class="mt-4 text-right text-sm font-medium">
           <a class="underline underline-offset-4 hover:underline text-primary-600" routerLink="/auth/forgot-password">
-            Mot de passe oublié ?
+            {{ 'auth.signIn.forgotPassword' | transloco }}
           </a>
         </div>
 
@@ -70,12 +70,12 @@
           matButton="filled"
           class="mt-6 w-full"
           [disabled]="signInForm().invalid() || authStore.isLoading()">
-          {{ authStore.isLoading() ? 'Connexion en cours...' : 'Se connecter' }}
+          {{ (authStore.isLoading() ? 'auth.signIn.loading' : 'common.signIn') | transloco }}
         </button>
 
         <div class="mt-8 flex items-center gap-x-4">
           <mat-divider class="flex-auto" />
-          <div class="text-neutral-500">Ou continuer avec</div>
+          <div class="text-neutral-500">{{ 'auth.signIn.continueWith' | transloco }}</div>
           <mat-divider class="flex-auto" />
         </div>
 
@@ -114,10 +114,8 @@
 
     <!-- Contenu -->
     <div class="relative z-10 w-full max-w-2xl">
-      <div class="text-5xl font-bold text-white">Retrouvez votre espace de travail</div>
-      <div class="text-medium mt-6 text-xl text-neutral-500">
-        Connectez-vous à une base applicative claire, modulaire et prête à évoluer avec vos fonctionnalités.
-      </div>
+      <div class="text-5xl font-bold text-white">{{ 'auth.signIn.asideTitle' | transloco }}</div>
+      <div class="text-medium mt-6 text-xl text-neutral-500">{{ 'auth.signIn.asideDescription' | transloco }}</div>
       <div class="mt-12 flex items-center">
         <!-- <div class="flex shrink-0 items-center -space-x-1.5">
           <img
@@ -133,9 +131,7 @@
           <img class="h-10 w-10 rounded-full object-cover ring-1" src="/images/photos/male-09.jpg" alt="Image d'avatar" />
           <img class="h-10 w-10 rounded-full object-cover ring-1" src="/images/photos/male-16.jpg" alt="Image d'avatar" />
         </div> -->
-        <div class="font-medium tracking-tight text-neutral-500">
-          Gardez un parcours d'authentification cohérent pendant que vous construisez le reste de votre produit.
-        </div>
+        <div class="font-medium tracking-tight text-neutral-500">{{ 'auth.signIn.asideFootnote' | transloco }}</div>
       </div>
     </div>
   </div>

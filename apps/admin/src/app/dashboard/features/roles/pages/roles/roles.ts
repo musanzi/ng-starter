@@ -11,6 +11,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { ConfirmDialog } from '@admin/app/dashboard/ui/confirm-dialog/confirm-dialog';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { DEFAULT_LIMIT, IRole, MAX_LIMIT } from '@libs/utils';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { RolesStore } from '../../data-access';
@@ -31,7 +32,8 @@ import { RoleFormDialog } from '../../ui/role-form-dialog/role-form-dialog';
     MatInputModule,
     MatPaginatorModule,
     MatTableModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TranslocoPipe
   ],
   templateUrl: './roles.html'
 })
@@ -39,6 +41,7 @@ export class Roles {
   private readonly destroyRef = inject(DestroyRef);
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly transloco = inject(TranslocoService);
 
   protected readonly displayedColumns = ['name', 'actions'];
   protected readonly query = {
@@ -65,12 +68,12 @@ export class Roles {
       const success = this.rolesStore.success();
 
       if (error) {
-        this.snackBar.open(error, 'Fermer', { duration: 5000 });
+        this.snackBar.open(error, this.transloco.translate('common.close'), { duration: 5000 });
         queueMicrotask(() => this.rolesStore.clearMessages());
       }
 
       if (success) {
-        this.snackBar.open(success, 'Fermer', { duration: 3000 });
+        this.snackBar.open(success, this.transloco.translate('common.close'), { duration: 3000 });
         queueMicrotask(() => this.rolesStore.clearMessages());
       }
     });
@@ -94,8 +97,8 @@ export class Roles {
     this.dialog
       .open<ConfirmDialog, unknown, boolean>(ConfirmDialog, {
         data: {
-          title: 'Supprimer le rôle',
-          message: `Voulez-vous supprimer le rôle "${role.name}" ?`
+          title: this.transloco.translate('admin.roles.delete.title'),
+          message: this.transloco.translate('admin.roles.delete.message', { name: role.name })
         },
         width: '420px'
       })

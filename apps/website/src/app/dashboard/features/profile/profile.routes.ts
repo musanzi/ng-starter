@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 export const profileRoutes: Routes = [
   {
     path: '',
-    title: 'Profil',
+    title: 'routes.profile',
     loadComponent: () => import('./layout/layout').then((c) => c.ProfileLayout),
     children: [
       {
@@ -13,12 +13,12 @@ export const profileRoutes: Routes = [
       },
       {
         path: 'account',
-        title: 'Account',
+        title: 'routes.account',
         loadComponent: () => import('./pages/account/account').then((c) => c.ProfileAccount)
       },
       {
         path: 'security',
-        title: 'Security',
+        title: 'routes.security',
         loadComponent: () => import('./pages/security/security').then((c) => c.ProfileSecurity)
       }
     ]

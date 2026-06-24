@@ -1,22 +1,22 @@
 <div class="flex flex-auto">
   <div class="flex flex-auto items-center justify-center bg-white p-4 sm:p-12 dark:bg-neutral-950">
     <div class="flex w-full max-w-80 flex-col sm:min-w-80">
-      <div class="text-4xl leading-tight font-extrabold tracking-tight">Connexion admin</div>
-      <div class="mt-0.5 font-medium text-neutral-500">Accédez à l'espace d'administration.</div>
+      <div class="text-4xl leading-tight font-extrabold tracking-tight">{{ 'admin.auth.signIn.title' | transloco }}</div>
+      <div class="mt-0.5 font-medium text-neutral-500">{{ 'admin.auth.signIn.description' | transloco }}</div>
 
       <form class="mt-8" (submit)="signIn($event)">
         <div class="flex flex-col gap-y-4">
           <mat-form-field class="w-full">
-            <mat-label>Adresse e-mail</mat-label>
+            <mat-label>{{ 'form.email' | transloco }}</mat-label>
             <input id="email" matInput [formField]="signInForm.email" />
             @if ((signInForm.email().touched() || signInForm.email().dirty()) && signInForm.email().errors()[0]; as
             error) {
-            <mat-error>{{ error.message }}</mat-error>
+            <mat-error>{{ error.message | transloco }}</mat-error>
             }
           </mat-form-field>
 
           <mat-form-field appearance="fill" class="w-full">
-            <mat-label>Mot de passe</mat-label>
+            <mat-label>{{ 'form.password' | transloco }}</mat-label>
             <input id="password" matInput type="password" [formField]="signInForm.password" #passwordField />
             <button
               matIconButton
@@ -35,14 +35,14 @@
             </button>
             @if ((signInForm.password().touched() || signInForm.password().dirty()) &&
             signInForm.password().errors()[0]; as error) {
-            <mat-error>{{ error.message }}</mat-error>
+            <mat-error>{{ error.message | transloco }}</mat-error>
             }
           </mat-form-field>
         </div>
 
         <div class="mt-4 text-right text-sm font-medium">
           <a class="underline underline-offset-4 hover:underline text-primary-600" routerLink="/auth/forgot-password">
-            Mot de passe oublié ?
+            {{ 'auth.signIn.forgotPassword' | transloco }}
           </a>
         </div>
 
@@ -59,12 +59,12 @@
           matButton="filled"
           class="mt-6 w-full"
           [disabled]="signInForm().invalid() || authStore.isLoading()">
-          {{ authStore.isLoading() ? 'Connexion en cours...' : 'Se connecter' }}
+          {{ (authStore.isLoading() ? 'auth.signIn.loading' : 'common.signIn') | transloco }}
         </button>
 
         <div class="mt-8 flex items-center gap-x-4">
           <mat-divider class="flex-auto" />
-          <div class="text-neutral-500">Ou continuer avec</div>
+          <div class="text-neutral-500">{{ 'auth.signIn.continueWith' | transloco }}</div>
           <mat-divider class="flex-auto" />
         </div>
 
@@ -102,13 +102,13 @@
     </svg>
 
     <div class="relative z-10 w-full max-w-2xl">
-      <div class="text-5xl font-bold text-white">Pilotez votre espace de travail</div>
+      <div class="text-5xl font-bold text-white">{{ 'admin.auth.signIn.asideTitle' | transloco }}</div>
       <div class="text-medium mt-6 text-xl text-neutral-500">
-        Connectez-vous avec un compte autorisé pour gérer les utilisateurs, les rôles et les indicateurs clés.
+        {{ 'admin.auth.signIn.asideDescription' | transloco }}
       </div>
       <div class="mt-12 flex items-center">
         <div class="font-medium tracking-tight text-neutral-500">
-          Les comptes sans rôle administrateur sont redirigés vers l'écran d'accès restreint.
+          {{ 'admin.auth.signIn.asideFootnote' | transloco }}
         </div>
       </div>
     </div>

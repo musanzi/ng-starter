@@ -1,11 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { AuthStore } from '../auth/data-access';
 
 @Component({
   selector: 'locked-page',
-  imports: [MatButton, MatIcon],
+  imports: [MatButton, MatIcon, TranslocoPipe],
   templateUrl: './locked.html'
 })
 export class Locked {

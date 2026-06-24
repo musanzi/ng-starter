@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { IUserPayload, IUserFormDialog } from '../../interfaces';
 
 @Component({
@@ -17,7 +18,8 @@ import { IUserPayload, IUserFormDialog } from '../../interfaces';
     MatIconModule,
     MatInputModule,
     MatSelectModule,
-    FormField
+    FormField,
+    TranslocoPipe
   ],
   templateUrl: './user-form-dialog.html'
 })
@@ -32,14 +34,14 @@ export class UserFormDialog {
     roles: this.resolveRoleIds(this.data.user?.roles ?? [])
   });
   protected readonly userForm = form(this.userFormModel, (form) => {
-    required(form.name, { message: 'Le nom est obligatoire.' });
-    required(form.email, { message: "L'email est obligatoire." });
-    email(form.email, { message: "L'email est invalide." });
+    required(form.name, { message: 'validation.nameRequired' });
+    required(form.email, { message: 'validation.emailRequired' });
+    email(form.email, { message: 'validation.emailInvalid' });
     validate(form.roles, ({ value }) => {
       if (value().length === 0) {
         return {
           kind: 'required',
-          message: 'Sélectionnez au moins un rôle.'
+          message: 'admin.users.validation.roleRequired'
         };
       }
 

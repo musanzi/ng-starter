@@ -1,6 +1,7 @@
 import { computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { getApiErrorMessage, IUser } from '@libs/utils';
+import { TranslocoService } from '@jsverse/transloco';
 import { patchState, signalStore, withComputed, withMethods, withProps, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { catchError, exhaustMap, finalize, of, pipe, tap } from 'rxjs';
@@ -31,20 +32,21 @@ export const AuthStore = signalStore(
   })),
   withProps(() => ({
     authService: inject(AuthService),
-    router: inject(Router)
+    router: inject(Router),
+    transloco: inject(TranslocoService)
   })),
-  withMethods(({ authService, router, ...store }) => ({
+  withMethods(({ authService, router, transloco, ...store }) => ({
     updateProfile: rxMethod<IUpdateProfilePayload>(
       pipe(
         tap(() => patchState(store, { isLoading: true, error: null, success: null })),
         exhaustMap((payload) =>
           authService.updateProfile(payload).pipe(
             tap((user) => {
-              patchState(store, { user, success: 'Informations du compte mises à jour.' });
+              patchState(store, { user, success: transloco.translate('messages.profileUpdated') });
             }),
             catchError((error: Error) => {
               patchState(store, {
-                error: getApiErrorMessage(error, 'Impossible de mettre à jour les informations du compte')
+                error: getApiErrorMessage(error, transloco.translate('messages.profileUpdateFailed'))
               });
               return of(null);
             }),
@@ -59,11 +61,11 @@ export const AuthStore = signalStore(
         exhaustMap((file) =>
           authService.updateAvatar(file).pipe(
             tap((user) => {
-              patchState(store, { user, success: 'Photo de profil mise à jour.' });
+              patchState(store, { user, success: transloco.translate('messages.avatarUpdated') });
             }),
             catchError((error: Error) => {
               patchState(store, {
-                error: getApiErrorMessage(error, 'Impossible de mettre à jour la photo de profil')
+                error: getApiErrorMessage(error, transloco.translate('messages.avatarUpdateFailed'))
               });
               return of(null);
             }),
@@ -77,10 +79,10 @@ export const AuthStore = signalStore(
         tap(() => patchState(store, { isLoading: true, error: null, success: null })),
         exhaustMap((payload) =>
           authService.updatePassword(payload).pipe(
-            tap(() => patchState(store, { success: 'Mot de passe mis à jour.' })),
+            tap(() => patchState(store, { success: transloco.translate('messages.passwordUpdated') })),
             catchError((error: Error) => {
               patchState(store, {
-                error: getApiErrorMessage(error, 'Impossible de mettre à jour le mot de passe')
+                error: getApiErrorMessage(error, transloco.translate('messages.passwordUpdateFailed'))
               });
               return of(null);
             }),
@@ -100,7 +102,10 @@ export const AuthStore = signalStore(
               router.navigateByUrl('/');
             }),
             catchError((error: Error) => {
-              patchState(store, { user: null, error: getApiErrorMessage(error, 'Authentification échouée') });
+              patchState(store, {
+                user: null,
+                error: getApiErrorMessage(error, transloco.translate('messages.authFailed'))
+              });
               return of(null);
             }),
             finalize(() => patchState(store, { isLoading: false }))
@@ -118,7 +123,10 @@ export const AuthStore = signalStore(
               router.navigateByUrl('/');
             }),
             catchError((error: Error) => {
-              patchState(store, { user: null, error: getApiErrorMessage(error, 'Authentification échouée') });
+              patchState(store, {
+                user: null,
+                error: getApiErrorMessage(error, transloco.translate('messages.authFailed'))
+              });
               return of(null);
             }),
             finalize(() => patchState(store, { isLoading: false }))
@@ -136,7 +144,7 @@ export const AuthStore = signalStore(
               router.navigateByUrl('/auth/sign-in');
             }),
             catchError((error: Error) => {
-              patchState(store, { error: getApiErrorMessage(error, 'Déconnexion échouée') });
+              patchState(store, { error: getApiErrorMessage(error, transloco.translate('messages.signOutFailed')) });
               return of(null);
             }),
             finalize(() => patchState(store, { isLoading: false }))
@@ -152,7 +160,7 @@ export const AuthStore = signalStore(
             tap(() => router.navigateByUrl('/auth/forgot-password/sent')),
             catchError((error: Error) => {
               patchState(store, {
-                error: getApiErrorMessage(error, "Impossible d'envoyer le lien de réinitialisation")
+                error: getApiErrorMessage(error, transloco.translate('messages.resetLinkFailed'))
               });
               return of(null);
             }),
@@ -168,11 +176,13 @@ export const AuthStore = signalStore(
           authService.resetPassword(payload).pipe(
             tap(() =>
               router.navigateByUrl('/auth/sign-in', {
-                state: { successMessage: 'Votre mot de passe a été réinitialisé. Vous pouvez vous connecter.' }
+                state: { successMessage: transloco.translate('messages.passwordResetSuccess') }
               })
             ),
             catchError((error: Error) => {
-              patchState(store, { error: getApiErrorMessage(error, 'Impossible de réinitialiser le mot de passe') });
+              patchState(store, {
+                error: getApiErrorMessage(error, transloco.translate('messages.passwordResetFailed'))
+              });
               return of(null);
             }),
             finalize(() => patchState(store, { isLoading: false }))

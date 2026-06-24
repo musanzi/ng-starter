@@ -5,33 +5,32 @@
       <div
         class="inline-flex items-center gap-2 rounded border border-primary-200 bg-primary-50 px-3 py-1 text-sm font-medium text-primary-800 dark:border-primary-900/70 dark:bg-primary-950/40 dark:text-primary-200">
         <mat-icon class="size-4" svgIcon="sparkles" />
-        Base Angular prête pour vos prochains produits
+        {{ 'landing.hero.badge' | transloco }}
       </div>
 
       <h1 class="mt-6 text-5xl font-bold leading-10 text-neutral-950 dark:text-white">
-        Démarrez avec une application claire, structurée et prête à évoluer.
+        {{ 'landing.hero.title' | transloco }}
       </h1>
 
       <p class="mt-6 max-w-xl text-xl leading-7 text-neutral-600 dark:text-neutral-300">
-        Un starter simple avec authentification, tableau de bord, thématisation et fondations Angular modernes pour
-        construire sans repartir de zéro.
+        {{ 'landing.hero.description' | transloco }}
       </p>
 
       <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
         @if (isAuthenticated()) {
         <a matButton="filled" routerLink="/dashboard">
-          Ouvrir le tableau de bord
+          {{ 'common.openDashboard' | transloco }}
           <mat-icon class="ml-2 size-4" svgIcon="arrow-right" />
         </a>
         <button matButton="outlined" type="button" [disabled]="isLoading()" (click)="signOut.emit()">
-          {{ isLoading() ? 'Déconnexion...' : 'Se déconnecter' }}
+          {{ (isLoading() ? 'common.signingOut' : 'common.signOut') | transloco }}
         </button>
         } @else {
         <a matButton="filled" routerLink="/auth/sign-in">
-          Se connecter
+          {{ 'common.signIn' | transloco }}
           <mat-icon class="ml-2 size-4" svgIcon="arrow-right" />
         </a>
-        <a matButton="outlined" routerLink="/auth/sign-up">Créer un compte</a>
+        <a matButton="outlined" routerLink="/auth/sign-up">{{ 'common.createAccount' | transloco }}</a>
         }
       </div>
     </div>
@@ -61,15 +60,15 @@
             <div class="space-y-4">
               <div class="grid gap-3 sm:grid-cols-3">
                 <div class="rounded border border-neutral-200 p-4 dark:border-neutral-800">
-                  <div class="text-sm text-neutral-500">Modules</div>
+                  <div class="text-sm text-neutral-500">{{ 'landing.preview.modules' | transloco }}</div>
                   <div class="mt-2 text-3xl font-bold text-neutral-950 dark:text-white">12</div>
                 </div>
                 <div class="rounded border border-neutral-200 p-4 dark:border-neutral-800">
-                  <div class="text-sm text-neutral-500">Flux d'authentification</div>
+                  <div class="text-sm text-neutral-500">{{ 'landing.preview.authFlows' | transloco }}</div>
                   <div class="mt-2 text-3xl font-bold text-neutral-950 dark:text-white">4</div>
                 </div>
                 <div class="rounded border border-neutral-200 p-4 dark:border-neutral-800">
-                  <div class="text-sm text-neutral-500">Thèmes</div>
+                  <div class="text-sm text-neutral-500">{{ 'landing.preview.themes' | transloco }}</div>
                   <div class="mt-2 text-3xl font-bold text-neutral-950 dark:text-white">3</div>
                 </div>
               </div>
@@ -77,14 +76,16 @@
               <div class="rounded border border-neutral-200 p-4 dark:border-neutral-800">
                 <div class="mb-4 flex items-center justify-between">
                   <div>
-                    <div class="text-lg font-semibold text-neutral-950 dark:text-white">Parcours prêt à brancher</div>
+                    <div class="text-lg font-semibold text-neutral-950 dark:text-white">
+                      {{ 'landing.preview.readyFlowTitle' | transloco }}
+                    </div>
                     <div class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-                      Authentification, profil et navigation sont déjà alignés.
+                      {{ 'landing.preview.readyFlowDescription' | transloco }}
                     </div>
                   </div>
                   <span
                     class="rounded bg-green-50 px-2 py-1 text-sm font-medium text-green-700 dark:bg-green-950/50 dark:text-green-300"
-                    >Actif</span
+                    >{{ 'common.active' | transloco }}</span
                   >
                 </div>
                 <div class="space-y-3">

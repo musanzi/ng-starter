@@ -5,7 +5,7 @@ export const authRoutes: Routes = [
   {
     path: '',
     canActivate: [unauthGuard],
-    title: 'Auth',
+    title: 'routes.auth',
     loadComponent: () => import('./layout/layout').then((c) => c.AuthLayout),
     children: [
       {
@@ -15,28 +15,28 @@ export const authRoutes: Routes = [
       },
       {
         path: 'forgot-password',
-        title: 'Forgot Password',
+        title: 'routes.forgotPassword',
         loadComponent: () => import('./pages/forgot-password/forgot-password').then((c) => c.AuthForgotPassword)
       },
       {
         path: 'forgot-password/sent',
-        title: 'Forgot Sent',
+        title: 'routes.forgotPasswordSent',
         loadComponent: () =>
           import('./pages/forgot-password-sent/forgot-password-sent').then((c) => c.AuthForgotPasswordSent)
       },
       {
         path: 'reset-password',
-        title: 'Reset Password',
+        title: 'routes.resetPassword',
         loadComponent: () => import('./pages/reset-password/reset-password').then((c) => c.AuthResetPassword)
       },
       {
         path: 'sign-in',
-        title: 'Sign In',
+        title: 'routes.signIn',
         loadComponent: () => import('./pages/sign-in/sign-in').then((c) => c.AuthSignIn)
       },
       {
         path: 'sign-up',
-        title: 'Sign up',
+        title: 'routes.signUp',
         loadComponent: () => import('./pages/sign-up/sign-up').then((c) => c.AuthSignUp)
       },
       {

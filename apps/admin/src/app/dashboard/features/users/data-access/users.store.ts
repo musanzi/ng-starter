@@ -1,4 +1,5 @@
 import { computed, inject } from '@angular/core';
+import { TranslocoService } from '@jsverse/transloco';
 import { decrementTotal, getApiErrorMessage } from '@libs/utils';
 import { patchState, signalStore, withComputed, withMethods, withProps, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -24,7 +25,7 @@ export const UsersStore = signalStore(
   withProps(() => ({
     usersService: inject(UsersService)
   })),
-  withMethods(({ usersService, ...store }) => {
+  withMethods(({ usersService, ...store }, transloco = inject(TranslocoService)) => {
     const loadUsers = rxMethod<IUserQuery>(
       pipe(
         tap(() => patchState(store, { error: null, isLoading: true })),
@@ -32,7 +33,7 @@ export const UsersStore = signalStore(
           usersService.findAll(query).pipe(
             tap((data) => patchState(store, { data })),
             catchError((error: Error) => {
-              patchState(store, { error: getApiErrorMessage(error, 'Impossible de charger les utilisateurs') });
+              patchState(store, { error: getApiErrorMessage(error, transloco.translate('admin.messages.usersLoadFailed')) });
               return of(null);
             }),
             finalize(() => patchState(store, { isLoading: false }))
@@ -55,12 +56,12 @@ export const UsersStore = signalStore(
 
                 patchState(store, {
                   data: [nextUsers, wasDeleted ? decrementTotal(total) : total],
-                  success: 'Utilisateur supprimé.'
+                  success: transloco.translate('admin.messages.userDeleted')
                 });
               }),
               catchError((error: Error) => {
                 patchState(store, {
-                  error: getApiErrorMessage(error, "Impossible de supprimer l'utilisateur")
+                  error: getApiErrorMessage(error, transloco.translate('admin.messages.userDeleteFailed'))
                 });
                 return of(null);
               })
@@ -80,11 +81,11 @@ export const UsersStore = signalStore(
                 anchor.download = 'users.csv';
                 anchor.click();
                 URL.revokeObjectURL(url);
-                patchState(store, { success: 'Export CSV généré.' });
+                patchState(store, { success: transloco.translate('admin.messages.usersExported') });
               }),
               catchError((error: Error) => {
                 patchState(store, {
-                  error: getApiErrorMessage(error, "Impossible d'exporter les utilisateurs")
+                  error: getApiErrorMessage(error, transloco.translate('admin.messages.usersExportFailed'))
                 });
                 return of(null);
               }),
@@ -99,12 +100,12 @@ export const UsersStore = signalStore(
           exhaustMap(({ file, query }) =>
             usersService.importCsv(file).pipe(
               tap(() => {
-                patchState(store, { success: 'Import CSV terminé.' });
+                patchState(store, { success: transloco.translate('admin.messages.usersImported') });
                 loadUsers(query);
               }),
               catchError((error: Error) => {
                 patchState(store, {
-                  error: getApiErrorMessage(error, "Impossible d'importer les utilisateurs")
+                  error: getApiErrorMessage(error, transloco.translate('admin.messages.usersImportFailed'))
                 });
                 return of(null);
               }),
@@ -126,7 +127,7 @@ export const UsersStore = signalStore(
                 if (userId) {
                   patchState(store, {
                     data: [users.map((user) => (user.id === userId ? savedUser : user)), total],
-                    success: 'Utilisateur modifié.'
+                    success: transloco.translate('admin.messages.userUpdated')
                   });
 
                   return;
@@ -134,14 +135,14 @@ export const UsersStore = signalStore(
 
                 patchState(store, {
                   data: [[savedUser, ...users], total + 1],
-                  success: 'Utilisateur créé.'
+                  success: transloco.translate('admin.messages.userCreated')
                 });
               }),
               catchError((error: Error) => {
                 patchState(store, {
                   error: getApiErrorMessage(
                     error,
-                    userId ? "Impossible de modifier l'utilisateur" : "Impossible de créer l'utilisateur"
+                    transloco.translate(userId ? 'admin.messages.userUpdateFailed' : 'admin.messages.userCreateFailed')
                   )
                 });
                 return of(null);

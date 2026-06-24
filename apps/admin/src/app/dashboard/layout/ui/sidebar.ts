@@ -1,12 +1,13 @@
 import { Component, computed, inject } from '@angular/core';
 import { AuthStore } from '@admin/app/auth/data-access';
 import { DashboardNavigation, User } from '@libs/ui';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { getProfileAvatarUrl } from '../../utils';
 import { NAVIGATION } from '../data/navigation.data';
 
 @Component({
   selector: 'admin-sidebar',
-  imports: [DashboardNavigation, User],
+  imports: [DashboardNavigation, User, TranslocoPipe],
   host: {
     class: 'flex w-full flex-auto flex-col'
   },
@@ -17,14 +18,39 @@ import { NAVIGATION } from '../data/navigation.data';
       </div>
     </div>
 
-    <ui-dashboard-navigation class="mt-8 mb-4 flex-auto" [navItems]="navItems" />
+    <ui-dashboard-navigation class="mt-8 mb-4 flex-auto" [navItems]="navItems()" />
 
-    <ui-user class="mx-4 mb-4" [user]="authStore.user()" [avatarUrl]="avatarUrl()" (signOut)="authStore.signOut()" />
+    <ui-user
+      class="mx-4 mb-4"
+      [user]="authStore.user()"
+      [avatarUrl]="avatarUrl()"
+      [appearanceLabel]="'common.appearance' | transloco"
+      [signOutLabel]="'common.signOut' | transloco"
+      [schemeLabels]="{
+        light: ('theme.light' | transloco),
+        dark: ('theme.dark' | transloco),
+        system: ('theme.system' | transloco)
+      }"
+      (signOut)="authStore.signOut()" />
   `
 })
 export class AdminSidebar {
   authStore = inject(AuthStore);
+  private readonly transloco = inject(TranslocoService);
   protected readonly avatarUrl = computed(() => getProfileAvatarUrl(this.authStore.user()?.avatar ?? null));
 
-  navItems = NAVIGATION;
+  protected readonly navItems = computed(() => {
+    this.transloco.activeLang();
+
+    return NAVIGATION.map((section) => ({
+      ...section,
+      description: section.description ? this.transloco.translate(section.description) : undefined,
+      label: this.transloco.translate(section.label),
+      children: section.children?.map((child) => ({
+        ...child,
+        description: child.description ? this.transloco.translate(child.description) : undefined,
+        label: this.transloco.translate(child.label)
+      }))
+    }));
+  });
 }

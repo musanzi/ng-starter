@@ -5,11 +5,12 @@ import { MatDivider } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { AuthStore } from '@website/app/auth/data-access';
 
 @Component({
   selector: 'security-settings',
-  imports: [MatButton, MatDivider, MatIcon, MatFormFieldModule, MatInputModule, FormField],
+  imports: [MatButton, MatDivider, MatIcon, MatFormFieldModule, MatInputModule, FormField, TranslocoPipe],
   templateUrl: './security.html'
 })
 export class ProfileSecurity {
@@ -20,14 +21,14 @@ export class ProfileSecurity {
     confirmPassword: ''
   });
   protected securitySettingsForm = form(this.securitySettingsModel, (schema) => {
-    required(schema.password, { message: 'Le mot de passe est obligatoire' });
-    required(schema.confirmPassword, { message: 'Confirmez votre mot de passe' });
+    required(schema.password, { message: 'validation.passwordRequired' });
+    required(schema.confirmPassword, { message: 'validation.confirmPasswordRequired' });
 
     validate(schema.confirmPassword, ({ value, valueOf }) => {
       if (value() !== valueOf(schema.password)) {
         return {
           kind: 'passwordMismatch',
-          message: 'Le mot de passe et sa confirmation ne correspondent pas.'
+          message: 'validation.passwordMismatch'
         };
       }
 
@@ -39,7 +40,7 @@ export class ProfileSecurity {
     this.authStore.clearMessages();
 
     effect(() => {
-      if (this.authStore.success() === 'Mot de passe mis à jour.') {
+      if (this.authStore.success()) {
         this.securitySettingsModel.set({
           password: '',
           confirmPassword: ''

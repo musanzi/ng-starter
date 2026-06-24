@@ -3,17 +3,17 @@ import { Route } from '@angular/router';
 export const dashboardRoutes: Route[] = [
   {
     path: '',
-    title: 'Stats',
+    title: 'admin.routes.stats',
     loadComponent: () => import('./features/stats/pages/stats/stats').then((c) => c.Stats)
   },
   {
     path: 'roles',
-    title: 'Rôles',
+    title: 'admin.routes.roles',
     loadComponent: () => import('./features/roles/pages/roles/roles').then((c) => c.Roles)
   },
   {
     path: 'users',
-    title: 'Utilisateurs',
+    title: 'admin.routes.users',
     loadComponent: () => import('./features/users/pages/users/users').then((c) => c.Users)
   }
 ];

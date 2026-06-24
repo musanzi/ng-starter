@@ -1,5 +1,6 @@
 import { computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslocoService } from '@jsverse/transloco';
 import { getApiErrorMessage, IUser } from '@libs/utils';
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -28,7 +29,7 @@ export const AuthStore = signalStore(
   withComputed(({ user }) => ({
     hasRights: computed(() => user()?.roles?.includes('admin'))
   })),
-  withMethods((store, _authService = inject(AuthService), router = inject(Router)) => ({
+  withMethods((store, _authService = inject(AuthService), router = inject(Router), transloco = inject(TranslocoService)) => ({
     signIn: rxMethod<ISignInPayload>(
       pipe(
         tap(() => patchState(store, { isLoading: true, error: null })),
@@ -39,7 +40,7 @@ export const AuthStore = signalStore(
               router.navigateByUrl(user.roles?.includes('admin') ? '/' : '/locked');
             }),
             catchError((error: Error) => {
-              patchState(store, { user: null, error: getApiErrorMessage(error, 'Authentification échouée') });
+              patchState(store, { user: null, error: getApiErrorMessage(error, transloco.translate('messages.authFailed')) });
               return of(null);
             }),
             finalize(() => patchState(store, { isLoading: false }))
@@ -53,11 +54,11 @@ export const AuthStore = signalStore(
         exhaustMap((payload) =>
           _authService.updateProfile(payload).pipe(
             tap((user) => {
-              patchState(store, { user, success: 'Informations du compte mises à jour.' });
+              patchState(store, { user, success: transloco.translate('messages.profileUpdated') });
             }),
             catchError((error: Error) => {
               patchState(store, {
-                error: getApiErrorMessage(error, 'Impossible de mettre à jour les informations du compte')
+                error: getApiErrorMessage(error, transloco.translate('messages.profileUpdateFailed'))
               });
               return of(null);
             }),
@@ -71,10 +72,10 @@ export const AuthStore = signalStore(
         tap(() => patchState(store, { isLoading: true, error: null, success: null })),
         exhaustMap((payload) =>
           _authService.updatePassword(payload).pipe(
-            tap(() => patchState(store, { success: 'Mot de passe mis à jour.' })),
+            tap(() => patchState(store, { success: transloco.translate('messages.passwordUpdated') })),
             catchError((error: Error) => {
               patchState(store, {
-                error: getApiErrorMessage(error, 'Impossible de mettre à jour le mot de passe')
+                error: getApiErrorMessage(error, transloco.translate('messages.passwordUpdateFailed'))
               });
               return of(null);
             }),
@@ -93,7 +94,7 @@ export const AuthStore = signalStore(
               router.navigateByUrl('/auth/sign-in');
             }),
             catchError((error: Error) => {
-              patchState(store, { error: getApiErrorMessage(error, 'Déconnexion échouée') });
+              patchState(store, { error: getApiErrorMessage(error, transloco.translate('messages.signOutFailed')) });
               return of(null);
             }),
             finalize(() => patchState(store, { isLoading: false }))
@@ -109,7 +110,7 @@ export const AuthStore = signalStore(
             tap(() => router.navigateByUrl('/auth/forgot-password/sent')),
             catchError((error: Error) => {
               patchState(store, {
-                error: getApiErrorMessage(error, "Impossible d'envoyer le lien de réinitialisation")
+                error: getApiErrorMessage(error, transloco.translate('messages.resetLinkFailed'))
               });
               return of(null);
             }),
@@ -125,11 +126,11 @@ export const AuthStore = signalStore(
           _authService.resetPassword(payload).pipe(
             tap(() =>
               router.navigateByUrl('/auth/sign-in', {
-                state: { successMessage: 'Votre mot de passe a été réinitialisé. Vous pouvez vous connecter.' }
+                state: { successMessage: transloco.translate('messages.passwordResetSuccess') }
               })
             ),
             catchError((error: Error) => {
-              patchState(store, { error: getApiErrorMessage(error, 'Impossible de réinitialiser le mot de passe') });
+              patchState(store, { error: getApiErrorMessage(error, transloco.translate('messages.passwordResetFailed')) });
               return of(null);
             }),
             finalize(() => patchState(store, { isLoading: false }))

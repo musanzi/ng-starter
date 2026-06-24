@@ -18,7 +18,13 @@
       <div class="flex-auto"></div>
 
       <div class="flex items-center gap-x-2">
-        <ui-scheme-switcher />
+        <ui-language-switcher />
+        <ui-scheme-switcher
+          [labels]="{
+            light: ('theme.light' | transloco),
+            dark: ('theme.dark' | transloco),
+            system: ('theme.system' | transloco)
+          }" />
       </div>
     </div>
     <!-- Content -->

@@ -2,11 +2,12 @@ import { Component, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
-import { SchemeSwitcher } from '@libs/ui';
+import { TranslocoPipe } from '@jsverse/transloco';
+import { LanguageSwitcher, SchemeSwitcher } from '@libs/ui';
 
 @Component({
   selector: 'landing-header',
-  imports: [RouterLink, MatButtonModule, MatIconModule, SchemeSwitcher],
+  imports: [RouterLink, MatButtonModule, MatIconModule, SchemeSwitcher, LanguageSwitcher, TranslocoPipe],
   templateUrl: './header.html'
 })
 export class LandingHeader {

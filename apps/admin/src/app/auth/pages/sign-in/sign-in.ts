@@ -6,12 +6,22 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { Router, RouterLink } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { AuthService, AuthStore } from '../../data-access';
 
 @Component({
   selector: 'auth-sign-in',
   templateUrl: './sign-in.html',
-  imports: [RouterLink, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, FormField, MatDivider]
+  imports: [
+    RouterLink,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    FormField,
+    MatDivider,
+    TranslocoPipe
+  ]
 })
 export class AuthSignIn {
   protected authStore = inject(AuthStore);
@@ -25,10 +35,10 @@ export class AuthSignIn {
     password: 'admin1234'
   });
   protected signInForm = form(this.signInFormModel, (form) => {
-    required(form.email, { message: 'Vous devez saisir une adresse e-mail' });
-    email(form.email, { message: 'Vous devez saisir une adresse e-mail valide' });
+    required(form.email, { message: 'validation.emailRequired' });
+    email(form.email, { message: 'validation.emailInvalid' });
 
-    required(form.password, { message: 'Vous devez saisir un mot de passe' });
+    required(form.password, { message: 'validation.passwordRequired' });
   });
 
   signIn(event: Event) {

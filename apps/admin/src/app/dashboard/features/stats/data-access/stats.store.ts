@@ -1,4 +1,5 @@
 import { inject } from '@angular/core';
+import { TranslocoService } from '@jsverse/transloco';
 import { getApiErrorMessage } from '@libs/utils';
 import { patchState, signalStore, withMethods, withProps, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -17,7 +18,7 @@ export const StatsStore = signalStore(
   withProps(() => ({
     statsService: inject(StatsService)
   })),
-  withMethods(({ statsService, ...store }) => ({
+  withMethods(({ statsService, ...store }, transloco = inject(TranslocoService)) => ({
     loadStats: rxMethod<void>(
       pipe(
         tap(() => patchState(store, { error: null, isLoading: true })),
@@ -25,7 +26,7 @@ export const StatsStore = signalStore(
           statsService.findAll().pipe(
             tap((data) => patchState(store, { data })),
             catchError((error: Error) => {
-              patchState(store, { error: getApiErrorMessage(error, 'Impossible de charger les statistiques') });
+              patchState(store, { error: getApiErrorMessage(error, transloco.translate('admin.messages.statsLoadFailed')) });
               return of(null);
             }),
             finalize(() => patchState(store, { isLoading: false }))

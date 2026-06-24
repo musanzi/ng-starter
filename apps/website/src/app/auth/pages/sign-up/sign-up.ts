@@ -5,12 +5,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { AuthStore } from '../../data-access';
 
 @Component({
   selector: 'auth-sign-up',
   templateUrl: './sign-up.html',
-  imports: [RouterLink, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, FormField]
+  imports: [RouterLink, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, FormField, TranslocoPipe]
 })
 export class AuthSignUp {
   protected authStore = inject(AuthStore);
@@ -21,16 +22,16 @@ export class AuthSignUp {
     confirmPassword: ''
   });
   protected signUpForm = form(this.signUpFormModel, (form) => {
-    required(form.name, { message: 'Vous devez saisir votre nom' });
-    required(form.email, { message: 'Vous devez saisir une adresse e-mail' });
-    email(form.email, { message: 'Vous devez saisir une adresse e-mail valide' });
-    required(form.password, { message: 'Vous devez saisir un mot de passe' });
-    required(form.confirmPassword, { message: 'Vous devez confirmer votre mot de passe' });
+    required(form.name, { message: 'validation.nameRequired' });
+    required(form.email, { message: 'validation.emailRequired' });
+    email(form.email, { message: 'validation.emailInvalid' });
+    required(form.password, { message: 'validation.passwordRequired' });
+    required(form.confirmPassword, { message: 'validation.confirmPasswordRequired' });
     validate(form.confirmPassword, ({ value, valueOf }) => {
       if (value() !== valueOf(form.password)) {
         return {
           kind: 'passwordMismatch',
-          message: 'Les mots de passe ne correspondent pas'
+          message: 'validation.passwordMismatch'
         };
       }
       return null;

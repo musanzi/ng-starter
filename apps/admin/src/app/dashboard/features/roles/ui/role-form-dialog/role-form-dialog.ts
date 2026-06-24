@@ -5,11 +5,12 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { IRolePayload, RoleFormDialogData } from '../../interfaces';
 
 @Component({
   selector: 'admin-role-form-dialog',
-  imports: [MatButtonModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, FormField],
+  imports: [MatButtonModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, FormField, TranslocoPipe],
   templateUrl: './role-form-dialog.html'
 })
 export class RoleFormDialog {
@@ -20,7 +21,7 @@ export class RoleFormDialog {
     name: this.data?.role?.name ?? ''
   });
   protected readonly roleForm = form(this.roleFormModel, (form) => {
-    required(form.name, { message: 'Le nom est obligatoire.' });
+    required(form.name, { message: 'validation.nameRequired' });
   });
   protected readonly isEdit = computed(() => Boolean(this.data?.role));
 

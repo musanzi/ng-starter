@@ -1,27 +1,28 @@
 import { Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'landing-features',
-  imports: [MatIconModule],
+  imports: [MatIconModule, TranslocoPipe],
   templateUrl: './features.html'
 })
 export class LandingFeatures {
   protected readonly features = [
     {
       icon: 'route',
-      title: 'Parcours applicatif cohérent',
-      description: 'Pages publiques, authentification et tableau de bord suivent une structure claire dès le départ.'
+      titleKey: 'landing.features.appFlow.title',
+      descriptionKey: 'landing.features.appFlow.description'
     },
     {
       icon: 'palette',
-      title: 'Interface sobre et thémable',
-      description: 'Angular Material, Tailwind et le changement de thème sont déjà combinés dans une base simple.'
+      titleKey: 'landing.features.theming.title',
+      descriptionKey: 'landing.features.theming.description'
     },
     {
       icon: 'layers',
-      title: 'Architecture lisible',
-      description: 'Les pages composent des sections UI, pendant que les services et stores restent dans data-access.'
+      titleKey: 'landing.features.architecture.title',
+      descriptionKey: 'landing.features.architecture.description'
     }
   ];
 }

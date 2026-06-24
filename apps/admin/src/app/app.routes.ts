@@ -5,11 +5,12 @@ export const routes: Route[] = [
   {
     path: 'locked',
     canActivate: [lockedGuard],
-    title: 'Locked',
+    title: 'admin.routes.locked',
     loadComponent: () => import('./locked/locked').then((c) => c.Locked)
   },
   {
     path: 'auth',
+    title: 'admin.routes.auth',
     loadChildren: () => import('./auth/auth.routes').then((r) => r.authRoutes)
   },
   {

@@ -5,39 +5,39 @@
         href="/"
         class="mb-4 inline-flex items-center cursor-pointer text-primary-700 dark:text-primary-500 self-start text-sm font-medium underline-offset-4 hover:underline">
         <mat-icon class="mr-1 size-4" svgIcon="arrow-left"></mat-icon>
-        Retour à l'accueil
+        {{ 'common.backHome' | transloco }}
       </a>
 
-      <div class="text-4xl leading-tight font-extrabold tracking-tight">Inscription</div>
+      <div class="text-4xl leading-tight font-extrabold tracking-tight">{{ 'auth.signUp.title' | transloco }}</div>
       <div class="mt-0.5 flex items-baseline font-medium">
-        <div class="text-neutral-500">Vous avez déjà un compte ?</div>
+        <div class="text-neutral-500">{{ 'auth.signUp.hasAccount' | transloco }}</div>
         <a class="ml-1 underline underline-offset-4 hover:underline text-primary-600" routerLink="/auth/sign-in">
-          Se connecter
+          {{ 'common.signIn' | transloco }}
         </a>
       </div>
 
       <form class="mt-8" (submit)="signUp($event)">
         <div class="flex flex-col gap-y-4">
           <mat-form-field class="w-full">
-            <mat-label>Nom</mat-label>
+            <mat-label>{{ 'form.name' | transloco }}</mat-label>
             <input id="name" matInput [formField]="signUpForm.name" />
-            @if ((signUpForm.name().touched() || signUpForm.name().dirty()) && signUpForm.name().errors()[0]; as
-            error) {
-            <mat-error>{{ error.message }}</mat-error>
+            @if ((signUpForm.name().touched() || signUpForm.name().dirty()) && signUpForm.name().errors()[0]; as error)
+            {
+            <mat-error>{{ error.message | transloco }}</mat-error>
             }
           </mat-form-field>
 
           <mat-form-field class="w-full">
-            <mat-label>Adresse e-mail</mat-label>
+            <mat-label>{{ 'form.email' | transloco }}</mat-label>
             <input id="email" matInput [formField]="signUpForm.email" />
             @if ((signUpForm.email().touched() || signUpForm.email().dirty()) && signUpForm.email().errors()[0]; as
             error) {
-            <mat-error>{{ error.message }}</mat-error>
+            <mat-error>{{ error.message | transloco }}</mat-error>
             }
           </mat-form-field>
 
           <mat-form-field appearance="fill" class="w-full">
-            <mat-label>Mot de passe</mat-label>
+            <mat-label>{{ 'form.password' | transloco }}</mat-label>
             <input id="password" matInput type="password" [formField]="signUpForm.password" #passwordField />
             <button
               matIconButton
@@ -56,12 +56,12 @@
             </button>
             @if ((signUpForm.password().touched() || signUpForm.password().dirty()) &&
             signUpForm.password().errors()[0]; as error) {
-            <mat-error>{{ error.message }}</mat-error>
+            <mat-error>{{ error.message | transloco }}</mat-error>
             }
           </mat-form-field>
 
           <mat-form-field appearance="fill" class="w-full">
-            <mat-label>Confirmer le mot de passe</mat-label>
+            <mat-label>{{ 'form.confirmPassword' | transloco }}</mat-label>
             <input
               id="confirmPassword"
               matInput
@@ -85,7 +85,7 @@
             </button>
             @if ((signUpForm.confirmPassword().touched() || signUpForm.confirmPassword().dirty()) &&
             signUpForm.confirmPassword().errors()[0]; as error) {
-            <mat-error>{{ error.message }}</mat-error>
+            <mat-error>{{ error.message | transloco }}</mat-error>
             }
           </mat-form-field>
         </div>
@@ -99,7 +99,7 @@
           matButton="filled"
           class="mt-6 w-full"
           [disabled]="signUpForm().invalid() || authStore.isLoading()">
-          {{ authStore.isLoading() ? 'Création du compte...' : 'Créer mon compte' }}
+          {{ (authStore.isLoading() ? 'auth.signUp.loading' : 'auth.signUp.submit') | transloco }}
         </button>
       </form>
     </div>
@@ -132,14 +132,10 @@
     </svg>
 
     <div class="relative z-10 w-full max-w-2xl">
-      <div class="text-5xl font-bold text-white">Créez votre espace de travail</div>
-      <div class="text-medium mt-6 text-xl text-neutral-500">
-        Démarrez depuis une base propre, modulaire et prête à accueillir vos fonctionnalités sans repartir de zéro.
-      </div>
+      <div class="text-5xl font-bold text-white">{{ 'auth.signUp.asideTitle' | transloco }}</div>
+      <div class="text-medium mt-6 text-xl text-neutral-500">{{ 'auth.signUp.asideDescription' | transloco }}</div>
       <div class="mt-12 flex items-center">
-        <div class="font-medium tracking-tight text-neutral-500">
-          Structurez votre application avec des parcours d'authentification déjà alignés sur votre interface.
-        </div>
+        <div class="font-medium tracking-tight text-neutral-500">{{ 'auth.signUp.asideFootnote' | transloco }}</div>
       </div>
     </div>
   </div>

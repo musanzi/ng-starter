@@ -1,4 +1,5 @@
 import { computed, inject } from '@angular/core';
+import { TranslocoService } from '@jsverse/transloco';
 import { decrementTotal, getApiErrorMessage, matchesQuery } from '@libs/utils';
 import { patchState, signalStore, withComputed, withMethods, withProps, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -23,7 +24,7 @@ export const RolesStore = signalStore(
   withProps(() => ({
     rolesService: inject(RolesService)
   })),
-  withMethods(({ rolesService, ...store }) => ({
+  withMethods(({ rolesService, ...store }, transloco = inject(TranslocoService)) => ({
     loadRoles: rxMethod<IRoleQuery>(
       pipe(
         tap(() => patchState(store, { error: null, isLoading: true })),
@@ -31,7 +32,7 @@ export const RolesStore = signalStore(
           rolesService.findAll(query).pipe(
             tap((data) => patchState(store, { data })),
             catchError((error: Error) => {
-              patchState(store, { error: getApiErrorMessage(error, 'Impossible de charger les rôles') });
+              patchState(store, { error: getApiErrorMessage(error, transloco.translate('admin.messages.rolesLoadFailed')) });
               return of(null);
             }),
             finalize(() => patchState(store, { isLoading: false }))
@@ -51,11 +52,11 @@ export const RolesStore = signalStore(
 
               patchState(store, {
                 data: [nextRoles, wasDeleted ? decrementTotal(total) : total],
-                success: 'Rôle supprimé.'
+                success: transloco.translate('admin.messages.roleDeleted')
               });
             }),
             catchError((error: Error) => {
-              patchState(store, { error: getApiErrorMessage(error, 'Impossible de supprimer le rôle') });
+              patchState(store, { error: getApiErrorMessage(error, transloco.translate('admin.messages.roleDeleteFailed')) });
               return of(null);
             })
           )
@@ -79,7 +80,7 @@ export const RolesStore = signalStore(
 
                 patchState(store, {
                   data: [nextRoles, roleExists && !matchesQuery(savedRole, query) ? decrementTotal(total) : total],
-                  success: 'Rôle modifié.'
+                  success: transloco.translate('admin.messages.roleUpdated')
                 });
 
                 return;
@@ -87,14 +88,14 @@ export const RolesStore = signalStore(
 
               patchState(store, {
                 data: matchesQuery(savedRole, query) ? [[savedRole, ...roles], total + 1] : [roles, total],
-                success: 'Rôle créé.'
+                success: transloco.translate('admin.messages.roleCreated')
               });
             }),
             catchError((error: Error) => {
               patchState(store, {
                 error: getApiErrorMessage(
                   error,
-                  roleId ? 'Impossible de modifier le rôle' : 'Impossible de créer le rôle'
+                  transloco.translate(roleId ? 'admin.messages.roleUpdateFailed' : 'admin.messages.roleCreateFailed')
                 )
               });
               return of(null);

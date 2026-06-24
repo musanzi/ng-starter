@@ -3,18 +3,18 @@ import { INavigationItem } from '@libs/utils';
 export const NAVIGATION: INavigationItem[] = [
   {
     id: 'account',
-    label: 'Mon compte',
-    description: 'Gestion du compte',
+    label: 'navigation.account.label',
+    description: 'navigation.account.description',
     children: [
       {
         id: 'account/info',
-        label: 'Mon compte',
+        label: 'navigation.account.info',
         icon: 'user',
         route: '/dashboard/account'
       },
       {
         id: 'account/security',
-        label: 'Mot de passe',
+        label: 'navigation.account.security',
         icon: 'lock',
         route: '/dashboard/security'
       }

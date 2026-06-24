@@ -1,8 +1,9 @@
 import { Component, inject } from '@angular/core';
-import { MatFormField } from '@angular/material/input';
-import { MatOption, MatSelect } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'settings-layout',
@@ -13,9 +14,9 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/rou
     MatTabNavPanel,
     RouterLink,
     RouterLinkActive,
-    MatFormField,
-    MatSelect,
-    MatOption
+    MatFormFieldModule,
+    MatSelectModule,
+    TranslocoPipe
   ],
   templateUrl: './layout.html'
 })
@@ -24,12 +25,12 @@ export class ProfileLayout {
   protected links = [
     {
       id: 'account',
-      label: 'Compte',
+      labelKey: 'profile.tabs.account',
       route: '/dashboard/account'
     },
     {
       id: 'security',
-      label: 'Sécurité',
+      labelKey: 'profile.tabs.security',
       route: '/dashboard/security'
     }
   ];
