@@ -9,7 +9,7 @@
 
 <mat-dialog-actions align="end">
   <button matButton type="button" [mat-dialog-close]="false">{{ data.cancelLabel ?? 'Annuler' }}</button>
-  <button matButton="filled" type="button" color="warn" [mat-dialog-close]="true">
+  <button matButton="filled" class="error" type="button" [mat-dialog-close]="true">
     {{ data.confirmLabel ?? 'Supprimer' }}
   </button>
 </mat-dialog-actions>

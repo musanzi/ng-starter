@@ -11,14 +11,11 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { ConfirmDialog } from '@admin/app/dashboard/ui/confirm-dialog/confirm-dialog';
-import { IRole } from '@libs/utils';
+import { DEFAULT_LIMIT, IRole, MAX_LIMIT } from '@libs/utils';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { RolesStore } from '../../data-access';
 import { IRoleQuery, IRolePayload } from '../../interfaces';
 import { RoleFormDialog } from '../../ui/role-form-dialog/role-form-dialog';
-
-const DEFAULT_LIMIT = 20;
-const MAX_LIMIT = 100;
 
 @Component({
   selector: 'admin-roles',
