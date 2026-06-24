@@ -9,6 +9,10 @@ export const routes: Route[] = [
     loadComponent: () => import('./locked/locked').then((c) => c.Locked)
   },
   {
+    path: 'auth',
+    loadChildren: () => import('./auth/auth.routes').then((r) => r.authRoutes)
+  },
+  {
     path: '',
     canActivate: [authGuard],
     loadComponent: () => import('./dashboard/layout/layout').then((c) => c.AdminLayout),

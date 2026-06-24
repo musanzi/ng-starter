@@ -2,14 +2,33 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { IUser } from '@libs/utils';
 import { Observable } from 'rxjs';
-import { IUpdatePasswordPayload, IUpdateProfilePayload } from '../interfaces';
+import { environment } from '../../../environments/environment';
+import {
+  IForgotPasswordPayload,
+  IResetPasswordPayload,
+  ISignInPayload,
+  IUpdatePasswordPayload,
+  IUpdateProfilePayload
+} from '../interfaces';
 
 @Service()
 export class AuthService {
   private http = inject(HttpClient);
 
+  signIn(dto: ISignInPayload): Observable<IUser> {
+    return this.http.post<IUser>('/auth/signin', dto);
+  }
+
   signOut(): Observable<void> {
     return this.http.post<void>('/auth/signout', {});
+  }
+
+  forgotPassword(dto: IForgotPasswordPayload): Observable<void> {
+    return this.http.post<void>('/auth/password/forgot', dto);
+  }
+
+  resetPassword(dto: IResetPasswordPayload): Observable<void> {
+    return this.http.post<void>('/auth/password/reset', dto);
   }
 
   updateProfile(dto: IUpdateProfilePayload): Observable<IUser> {
@@ -22,5 +41,9 @@ export class AuthService {
 
   getProfile(): Observable<IUser> {
     return this.http.get<IUser>('/auth/me');
+  }
+
+  getGoogleSignInUrl(): string {
+    return `${environment.apiUrl}/auth/signin/google?target=admin`;
   }
 }

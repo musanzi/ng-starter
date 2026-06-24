@@ -4,7 +4,14 @@ import { getApiErrorMessage, IUser } from '@libs/utils';
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { catchError, exhaustMap, finalize, of, pipe, tap } from 'rxjs';
-import { IAuthState, IUpdatePasswordPayload, IUpdateProfilePayload } from '../interfaces';
+import {
+  IForgotPasswordPayload,
+  IAuthState,
+  IResetPasswordPayload,
+  ISignInPayload,
+  IUpdatePasswordPayload,
+  IUpdateProfilePayload
+} from '../interfaces';
 import { AuthService } from './auth.service';
 
 const initialState: IAuthState = {
@@ -22,6 +29,24 @@ export const AuthStore = signalStore(
     hasRights: computed(() => user()?.roles?.includes('admin'))
   })),
   withMethods((store, _authService = inject(AuthService), router = inject(Router)) => ({
+    signIn: rxMethod<ISignInPayload>(
+      pipe(
+        tap(() => patchState(store, { isLoading: true, error: null })),
+        exhaustMap((dto) =>
+          _authService.signIn(dto).pipe(
+            tap((user) => {
+              patchState(store, { user });
+              router.navigateByUrl(user.roles?.includes('admin') ? '/' : '/locked');
+            }),
+            catchError((error: Error) => {
+              patchState(store, { user: null, error: getApiErrorMessage(error, 'Authentification échouée') });
+              return of(null);
+            }),
+            finalize(() => patchState(store, { isLoading: false }))
+          )
+        )
+      )
+    ),
     updateProfile: rxMethod<IUpdateProfilePayload>(
       pipe(
         tap(() => patchState(store, { isLoading: true, error: null, success: null })),
@@ -65,10 +90,46 @@ export const AuthStore = signalStore(
           _authService.signOut().pipe(
             tap(() => {
               patchState(store, { user: null });
-              router.navigateByUrl('/locked');
+              router.navigateByUrl('/auth/sign-in');
             }),
             catchError((error: Error) => {
               patchState(store, { error: getApiErrorMessage(error, 'Déconnexion échouée') });
+              return of(null);
+            }),
+            finalize(() => patchState(store, { isLoading: false }))
+          )
+        )
+      )
+    ),
+    forgotPassword: rxMethod<IForgotPasswordPayload>(
+      pipe(
+        tap(() => patchState(store, { isLoading: true, error: null })),
+        exhaustMap((payload) =>
+          _authService.forgotPassword(payload).pipe(
+            tap(() => router.navigateByUrl('/auth/forgot-password/sent')),
+            catchError((error: Error) => {
+              patchState(store, {
+                error: getApiErrorMessage(error, "Impossible d'envoyer le lien de réinitialisation")
+              });
+              return of(null);
+            }),
+            finalize(() => patchState(store, { isLoading: false }))
+          )
+        )
+      )
+    ),
+    resetPassword: rxMethod<IResetPasswordPayload>(
+      pipe(
+        tap(() => patchState(store, { isLoading: true, error: null })),
+        exhaustMap((payload) =>
+          _authService.resetPassword(payload).pipe(
+            tap(() =>
+              router.navigateByUrl('/auth/sign-in', {
+                state: { successMessage: 'Votre mot de passe a été réinitialisé. Vous pouvez vous connecter.' }
+              })
+            ),
+            catchError((error: Error) => {
+              patchState(store, { error: getApiErrorMessage(error, 'Impossible de réinitialiser le mot de passe') });
               return of(null);
             }),
             finalize(() => patchState(store, { isLoading: false }))
@@ -93,6 +154,9 @@ export const AuthStore = signalStore(
     ),
     clearMessages(): void {
       patchState(store, { error: null, success: null });
+    },
+    setError(error: string): void {
+      patchState(store, { error, success: null });
     },
     setUser(user: IUser | null): void {
       patchState(store, { user });

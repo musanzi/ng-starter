@@ -11,7 +11,11 @@ export const authGuard: CanActivateFn = () => {
   return toObservable(authStore.isVerifying).pipe(
     filter((isVerifying) => !isVerifying),
     take(1),
-    map(() => (authStore.hasRights() ? true : router.createUrlTree(['/locked'])))
+    map(() => {
+      if (authStore.hasRights()) return true;
+
+      return router.createUrlTree([authStore.user() ? '/locked' : '/auth/sign-in']);
+    })
   );
 };
 
@@ -22,6 +26,26 @@ export const lockedGuard: CanActivateFn = () => {
   return toObservable(authStore.isVerifying).pipe(
     filter((isVerifying) => !isVerifying),
     take(1),
-    map(() => (authStore.hasRights() ? router.createUrlTree(['/']) : true))
+    map(() => {
+      if (authStore.hasRights()) return router.createUrlTree(['/']);
+
+      return authStore.user() ? true : router.createUrlTree(['/auth/sign-in']);
+    })
+  );
+};
+
+export const unauthGuard: CanActivateFn = () => {
+  const authStore = inject(AuthStore);
+  const router = inject(Router);
+
+  return toObservable(authStore.isVerifying).pipe(
+    filter((isVerifying) => !isVerifying),
+    take(1),
+    map(() => {
+      if (authStore.hasRights()) return router.createUrlTree(['/']);
+      if (authStore.user()) return router.createUrlTree(['/locked']);
+
+      return true;
+    })
   );
 };

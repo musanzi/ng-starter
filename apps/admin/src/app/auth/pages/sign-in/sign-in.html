@@ -1,0 +1,108 @@
+<div class="flex flex-auto">
+  <div class="flex flex-auto items-center justify-center bg-white p-4 sm:p-12 dark:bg-neutral-950">
+    <div class="flex w-full max-w-80 flex-col sm:min-w-80">
+      <div class="text-4xl leading-tight font-extrabold tracking-tight">Connexion admin</div>
+      <div class="mt-0.5 font-medium text-neutral-500">Accédez à l'espace d'administration.</div>
+
+      <form class="mt-8" (submit)="signIn($event)">
+        <div class="flex flex-col gap-y-4">
+          <mat-form-field class="w-full">
+            <mat-label>Adresse e-mail</mat-label>
+            <input id="email" matInput [formField]="signInForm.email" />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Mot de passe</mat-label>
+            <input id="password" matInput type="password" [formField]="signInForm.password" #passwordField />
+            <button
+              matIconButton
+              type="button"
+              (click)="
+                passwordField.type === 'password'
+                  ? (passwordField.type = 'text')
+                  : (passwordField.type = 'password')
+              "
+              matSuffix>
+              @if (passwordField.type === 'password') {
+              <mat-icon class="size-5" svgIcon="eye"></mat-icon>
+              } @if (passwordField.type === 'text') {
+              <mat-icon class="size-5" svgIcon="eye-off"></mat-icon>
+              }
+            </button>
+          </mat-form-field>
+        </div>
+
+        <div class="mt-4 text-right text-sm font-medium">
+          <a class="underline underline-offset-4 hover:underline text-primary-600" routerLink="/auth/forgot-password">
+            Mot de passe oublié ?
+          </a>
+        </div>
+
+        @if (successMessage(); as message) {
+        <div class="mt-4 rounded border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-700">
+          {{ message }}
+        </div>
+        } @if (authStore.error(); as error) {
+        <div class="mt-4 rounded border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{{ error }}</div>
+        }
+
+        <button
+          type="submit"
+          matButton="filled"
+          class="mt-6 w-full"
+          [disabled]="signInForm().invalid() || authStore.isLoading()">
+          {{ authStore.isLoading() ? 'Connexion en cours...' : 'Se connecter' }}
+        </button>
+
+        <div class="mt-8 flex items-center gap-x-4">
+          <mat-divider class="flex-auto" />
+          <div class="text-neutral-500">Ou continuer avec</div>
+          <mat-divider class="flex-auto" />
+        </div>
+
+        <div class="mt-8 flex items-center space-x-4">
+          <a matButton="outlined" class="flex-auto" [href]="googleSignInUrl">Google</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div
+    class="relative hidden flex-auto items-center justify-center overflow-hidden border-l bg-neutral-950 p-8 sm:px-12 md:flex">
+    <svg
+      class="absolute inset-0 pointer-events-none"
+      viewBox="0 0 960 540"
+      width="100%"
+      height="100%"
+      preserveAspectRatio="xMidYMax slice"
+      xmlns="http://www.w3.org/2000/svg">
+      <g class="text-neutral-700/25" fill="none" stroke="currentColor" stroke-width="100">
+        <circle r="234" cx="196" cy="23"></circle>
+        <circle r="234" cx="790" cy="491"></circle>
+      </g>
+    </svg>
+
+    <!-- prettier-ignore -->
+    <svg class="absolute -top-16 -right-16 text-neutral-700"
+         viewBox="0 0 220 192" width="220" height="192" fill="none">
+      <defs>
+        <pattern id="admin-auth-pattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+          <rect x="0" y="0" width="4" height="4" fill="currentColor"></rect>
+        </pattern>
+      </defs>
+      <rect width="220" height="192" fill="url(#admin-auth-pattern)"></rect>
+    </svg>
+
+    <div class="relative z-10 w-full max-w-2xl">
+      <div class="text-5xl font-bold text-white">Pilotez votre espace de travail</div>
+      <div class="text-medium mt-6 text-xl text-neutral-500">
+        Connectez-vous avec un compte autorisé pour gérer les utilisateurs, les rôles et les indicateurs clés.
+      </div>
+      <div class="mt-12 flex items-center">
+        <div class="font-medium tracking-tight text-neutral-500">
+          Les comptes sans rôle administrateur sont redirigés vers l'écran d'accès restreint.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
