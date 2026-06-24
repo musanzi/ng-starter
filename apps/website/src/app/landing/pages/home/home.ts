@@ -1,11 +1,14 @@
 import { Component, inject } from '@angular/core';
-import { MatButton } from '@angular/material/button';
-import { RouterLink } from '@angular/router';
 import { AuthStore } from '@website/app/auth/data-access';
+import { LandingCta } from '../../ui/cta/cta';
+import { LandingFeatures } from '../../ui/features/features';
+import { LandingFooter } from '../../ui/footer/footer';
+import { LandingHeader } from '../../ui/header/header';
+import { LandingHero } from '../../ui/hero/hero';
 
 @Component({
   selector: 'landing-page',
-  imports: [RouterLink, MatButton],
+  imports: [LandingHeader, LandingHero, LandingFeatures, LandingCta, LandingFooter],
   templateUrl: './home.html'
 })
 export default class Home {
