@@ -5,6 +5,9 @@
     <mat-form-field class="w-full">
       <mat-label>Nom</mat-label>
       <input matInput [formField]="roleForm.name" autocomplete="off" cdkFocusInitial />
+      @if ((roleForm.name().touched() || roleForm.name().dirty()) && roleForm.name().errors()[0]; as error) {
+      <mat-error>{{ error.message }}</mat-error>
+      }
     </mat-form-field>
   </mat-dialog-content>
 

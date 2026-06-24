@@ -5,11 +5,17 @@
     <mat-form-field>
       <mat-label>Nom</mat-label>
       <input matInput [formField]="userForm.name" autocomplete="name" cdkFocusInitial />
+      @if ((userForm.name().touched() || userForm.name().dirty()) && userForm.name().errors()[0]; as error) {
+      <mat-error>{{ error.message }}</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Email</mat-label>
       <input matInput type="email" [formField]="userForm.email" autocomplete="email" />
+      @if ((userForm.email().touched() || userForm.email().dirty()) && userForm.email().errors()[0]; as error) {
+      <mat-error>{{ error.message }}</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field>
@@ -24,6 +30,9 @@
         <mat-option [value]="role.id">{{ role.name }}</mat-option>
         }
       </mat-select>
+      @if ((userForm.roles().touched() || userForm.roles().dirty()) && userForm.roles().errors()[0]; as error) {
+      <mat-error>{{ error.message }}</mat-error>
+      }
     </mat-form-field>
   </mat-dialog-content>
 

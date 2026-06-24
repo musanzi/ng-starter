@@ -41,12 +41,20 @@
     <mat-label>Nom</mat-label>
     <input matInput [formField]="accountSettingsForm.name" />
     <mat-icon svgIcon="user" matPrefix></mat-icon>
+    @if ((accountSettingsForm.name().touched() || accountSettingsForm.name().dirty()) &&
+    accountSettingsForm.name().errors()[0]; as error) {
+    <mat-error>{{ error.message }}</mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field class="w-full">
     <mat-label>Adresse e-mail</mat-label>
     <input matInput type="email" [formField]="accountSettingsForm.email" />
     <mat-icon svgIcon="mail" matPrefix></mat-icon>
+    @if ((accountSettingsForm.email().touched() || accountSettingsForm.email().dirty()) &&
+    accountSettingsForm.email().errors()[0]; as error) {
+    <mat-error>{{ error.message }}</mat-error>
+    }
   </mat-form-field>
 
   @if (authStore.success(); as message) {

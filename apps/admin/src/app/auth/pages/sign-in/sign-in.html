@@ -9,6 +9,10 @@
           <mat-form-field class="w-full">
             <mat-label>Adresse e-mail</mat-label>
             <input id="email" matInput [formField]="signInForm.email" />
+            @if ((signInForm.email().touched() || signInForm.email().dirty()) && signInForm.email().errors()[0]; as
+            error) {
+            <mat-error>{{ error.message }}</mat-error>
+            }
           </mat-form-field>
 
           <mat-form-field appearance="fill" class="w-full">
@@ -29,6 +33,10 @@
               <mat-icon class="size-5" svgIcon="eye-off"></mat-icon>
               }
             </button>
+            @if ((signInForm.password().touched() || signInForm.password().dirty()) &&
+            signInForm.password().errors()[0]; as error) {
+            <mat-error>{{ error.message }}</mat-error>
+            }
           </mat-form-field>
         </div>
 

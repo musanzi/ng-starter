@@ -21,11 +21,19 @@
           <mat-form-field class="w-full">
             <mat-label>Nom</mat-label>
             <input id="name" matInput [formField]="signUpForm.name" />
+            @if ((signUpForm.name().touched() || signUpForm.name().dirty()) && signUpForm.name().errors()[0]; as
+            error) {
+            <mat-error>{{ error.message }}</mat-error>
+            }
           </mat-form-field>
 
           <mat-form-field class="w-full">
             <mat-label>Adresse e-mail</mat-label>
             <input id="email" matInput [formField]="signUpForm.email" />
+            @if ((signUpForm.email().touched() || signUpForm.email().dirty()) && signUpForm.email().errors()[0]; as
+            error) {
+            <mat-error>{{ error.message }}</mat-error>
+            }
           </mat-form-field>
 
           <mat-form-field appearance="fill" class="w-full">
@@ -46,6 +54,10 @@
               <mat-icon class="size-5" svgIcon="eye-off"></mat-icon>
               }
             </button>
+            @if ((signUpForm.password().touched() || signUpForm.password().dirty()) &&
+            signUpForm.password().errors()[0]; as error) {
+            <mat-error>{{ error.message }}</mat-error>
+            }
           </mat-form-field>
 
           <mat-form-field appearance="fill" class="w-full">
@@ -71,6 +83,10 @@
               <mat-icon class="size-5" svgIcon="eye-off"></mat-icon>
               }
             </button>
+            @if ((signUpForm.confirmPassword().touched() || signUpForm.confirmPassword().dirty()) &&
+            signUpForm.confirmPassword().errors()[0]; as error) {
+            <mat-error>{{ error.message }}</mat-error>
+            }
           </mat-form-field>
         </div>
 
