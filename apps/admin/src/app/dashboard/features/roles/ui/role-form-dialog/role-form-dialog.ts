@@ -5,12 +5,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { IRole } from '@libs/utils';
-import { IRolePayload } from '../../interfaces';
-
-export interface RoleFormDialogData {
-  role?: IRole;
-}
+import { IRolePayload, RoleFormDialogData } from '../../interfaces';
 
 @Component({
   selector: 'admin-role-form-dialog',
