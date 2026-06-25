@@ -37,7 +37,7 @@ export class AuthService {
   }
 
   updateProfile(dto: IUpdateProfilePayload): Observable<IUser> {
-    return this.http.patch<IUser>('/auth/me', dto);
+    return this.http.patch<IUser>('/auth/me/update', dto);
   }
 
   updateAvatar(file: File): Observable<IUser> {
@@ -48,7 +48,7 @@ export class AuthService {
   }
 
   updatePassword(dto: IUpdatePasswordPayload): Observable<void> {
-    return this.http.patch<void>('/auth/password', dto);
+    return this.http.patch<void>('/auth/password/update', dto);
   }
 
   getGoogleSignInUrl(): string {

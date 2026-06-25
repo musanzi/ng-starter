@@ -2,7 +2,7 @@
 
 A production-oriented Angular monorepo for building a public website and an admin application from the same codebase.
 
-The workspace uses Nx, pnpm, Angular SSR, shared libraries, and a shared styling layer so both apps can share infrastructure without mixing app-specific features.
+The workspace uses Nx, pnpm, Angular SSR, Angular Material, Transloco, shared libraries, and a shared styling layer so both apps can share infrastructure without mixing app-specific features.
 
 ## What's Included
 
@@ -12,11 +12,12 @@ The workspace uses Nx, pnpm, Angular SSR, shared libraries, and a shared styling
 - **Server-side rendering** for both apps
 - **Nx workspace tooling** for builds, linting, caching, and project orchestration
 - **Shared libraries**
-  - `@libs/core` for application infrastructure such as icons, theming, media, and local storage
+  - `@libs/core` for application infrastructure such as icons, theming, media, Transloco, and local storage
   - `@libs/ui` for reusable standalone UI building blocks
   - `@libs/utils` for reusable interfaces, errors, and utility types
 - **Shared styles** under `styles/`, including Tailwind CSS, base styles, components, and third-party overrides
 - **Path aliases** for cleaner imports across apps and libraries
+- **Light/dark mode and EN/FR translation support** as baseline UI requirements
 
 ## Tech Stack
 
@@ -27,6 +28,7 @@ The workspace uses Nx, pnpm, Angular SSR, shared libraries, and a shared styling
 - Tailwind CSS 4
 - Angular Material / CDK
 - NgRx Signals
+- Transloco
 - Express SSR
 - Vitest-ready tooling
 
@@ -135,7 +137,14 @@ The admin app protects the dashboard at the root route and includes a locked scr
 ```text
 apps/
   admin/              Admin/dashboard application
+    src/app/auth/     Admin authentication feature
+    src/app/dashboard/  Admin dashboard feature
+    src/app/locked/   Locked-session screen
+
   website/            Public website application
+    src/app/auth/     Public authentication feature
+    src/app/dashboard/  User dashboard feature
+    src/app/landing/  Public landing routes
 
 libs/
   core/               Shared application infrastructure
@@ -148,6 +157,15 @@ styles/               Shared CSS, Tailwind layers, and component styles
 eslint.config.ts      Workspace ESLint configuration
 nx.json               Nx workspace configuration
 tsconfig.base.json    Shared TypeScript configuration and path aliases
+```
+
+Feature folders should stay inside the owning app unless the code is genuinely reusable. Within a feature, use these folders consistently:
+
+```text
+data-access/          Services and NgRx Signal Store state
+interfaces/           Feature-local interfaces prefixed with I
+pages/                Route-level screens
+ui/                   Presentational components with no direct store access
 ```
 
 ## Import Aliases
@@ -163,6 +181,31 @@ import { ... } from '@website/app/...';
 ```
 
 Use `@libs/core` for reusable infrastructure, `@libs/ui` for shared UI components, and `@libs/utils` for shared types or lightweight utilities. Keep app-specific code inside its app folder unless it is clearly useful across applications.
+
+## Feature Conventions
+
+- Build UI with Angular Material components and shared styles.
+- Every new UI surface must support light and dark mode.
+- Every new user-facing label must support English and French translations.
+- Put feature state and API services in `data-access/`.
+- Use Angular `@Service()` for services.
+- Use NgRx Signal Store for feature state.
+- Put all interfaces in an `interfaces/` folder and prefix interface names with `I`, for example `ISignInPayload`.
+- Do not define reusable or feature contracts directly inside components or services.
+- Keep `ui/` components presentational. They should receive data through inputs and emit events instead of reading directly from stores.
+
+## Internationalization
+
+Translations are loaded through the shared Transloco loader in `@libs/core`.
+
+Runtime translation files are expected at:
+
+```text
+public/i18n/en.json
+public/i18n/fr.json
+```
+
+Because `public/` is configured as a build asset input for both applications, translations placed there are available to both SSR builds.
 
 ## Styling
 
@@ -217,3 +260,4 @@ dist/admin/server/server.mjs
 - Keep route-level features colocated inside the owning app.
 - Keep global visual decisions in `styles/` so both apps stay consistent.
 - Use Nx commands when adding new projects, libraries, or targets so workspace metadata stays in sync.
+- Before opening a PR or handing off work, run the relevant lint and build commands for the app you changed.

@@ -15,5 +15,10 @@ export const dashboardRoutes: Route[] = [
     path: 'users',
     title: 'admin.routes.users',
     loadComponent: () => import('./features/users/pages/users/users').then((c) => c.Users)
+  },
+  {
+    path: 'account',
+    title: 'routes.account',
+    loadChildren: () => import('./features/account/account.routes').then((r) => r.accountRoutes)
   }
 ];

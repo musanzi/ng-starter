@@ -67,6 +67,25 @@ export const AuthStore = signalStore(
         )
       )
     ),
+    updateAvatar: rxMethod<File>(
+      pipe(
+        tap(() => patchState(store, { isLoading: true, error: null, success: null })),
+        exhaustMap((file) =>
+          _authService.updateAvatar(file).pipe(
+            tap((user) => {
+              patchState(store, { user, success: transloco.translate('messages.avatarUpdated') });
+            }),
+            catchError((error: Error) => {
+              patchState(store, {
+                error: getApiErrorMessage(error, transloco.translate('messages.avatarUpdateFailed'))
+              });
+              return of(null);
+            }),
+            finalize(() => patchState(store, { isLoading: false }))
+          )
+        )
+      )
+    ),
     updatePassword: rxMethod<IUpdatePasswordPayload>(
       pipe(
         tap(() => patchState(store, { isLoading: true, error: null, success: null })),
