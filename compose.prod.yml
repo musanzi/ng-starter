@@ -10,7 +10,7 @@ services:
       - '4200:4200'
 
   admin:
-    image: starter-admin
+    container_name: starter-admin
     build:
       context: .
       target: production
