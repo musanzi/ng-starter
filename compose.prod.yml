@@ -1,6 +1,6 @@
 services:
   website:
-    image: starter-admin
+    container_name: starter-admin
     build:
       context: .
       target: production

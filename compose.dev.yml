@@ -1,6 +1,6 @@
 services:
   website:
-    image: starter-website
+    container_name: starter-website
     build:
       context: .
       target: development
