@@ -3,7 +3,7 @@ import { RouterLink } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { DashboardNavigation, User } from '@libs/ui';
 import { AuthStore } from '@website/app/auth/data-access';
-import { getProfileAvatarUrl } from '../../utils';
+import { getProfileAvatarUrl } from '../../shared';
 import { NAVIGATION } from '../data/navigation.data';
 
 @Component({

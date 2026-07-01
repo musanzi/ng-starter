@@ -10,7 +10,7 @@ import { provideTransloco, translocoConfig } from '@jsverse/transloco';
 import { provideIcons, provideTheming, TranslocoHttpLoader } from '@libs/core';
 import { provideApp } from './app.provider';
 import { routes } from './app.routes';
-import { httpInterceptor, PageTitleStrategy } from './utils';
+import { httpInterceptor, PageTitleStrategy } from './shared';
 registerLocaleData(localeFr, 'fr');
 
 export const appConfig: ApplicationConfig = {
