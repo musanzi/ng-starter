@@ -2,8 +2,8 @@ import { Component, computed, inject } from '@angular/core';
 import { AuthStore } from '@admin/app/auth/data-access';
 import { DashboardNavigation, User } from '@libs/ui';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { getProfileAvatarUrl } from '../../shared';
 import { NAVIGATION } from '../data/navigation.data';
+import { getProfileAvatarUrl } from '../../utils';
 
 @Component({
   selector: 'admin-sidebar',
