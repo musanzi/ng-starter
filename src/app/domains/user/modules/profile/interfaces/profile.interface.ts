@@ -1,4 +1,4 @@
-import { IUser } from '@/app/core/interfaces';
+import { IUser } from '@/app/shared/interfaces';
 
 export interface IProfileFormModel {
   name: string;

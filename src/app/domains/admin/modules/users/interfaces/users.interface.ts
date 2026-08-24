@@ -1,4 +1,4 @@
-import { IRole, IUser } from '@/app/core/interfaces';
+import { IRole, IUser } from '@/app/shared/interfaces';
 
 export interface IQueryParams {
   page: number;

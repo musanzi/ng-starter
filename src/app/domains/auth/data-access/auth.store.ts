@@ -4,7 +4,7 @@ import { pipe, tap, catchError, of, exhaustMap, map } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { IUser } from '@/app/core/interfaces';
+import { IUser } from '@/app/shared/interfaces';
 
 interface IAuthStore {
   user: IUser | null;

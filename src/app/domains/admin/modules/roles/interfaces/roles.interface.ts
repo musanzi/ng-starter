@@ -1,4 +1,4 @@
-import { IRole } from '@/app/core/interfaces';
+import { IRole } from '@/app/shared/interfaces';
 
 export interface IRolePayload {
   name: string;

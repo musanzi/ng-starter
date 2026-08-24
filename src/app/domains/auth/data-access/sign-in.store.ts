@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IUser } from '@/app/core/interfaces';
+import { IUser } from '@/app/shared/interfaces';
 import { environment } from '@/environments/environment';
 import { patchState, signalStore, withMethods, withProps, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
