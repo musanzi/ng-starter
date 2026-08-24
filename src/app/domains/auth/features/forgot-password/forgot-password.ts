@@ -5,13 +5,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
+import { Message } from '@/app/shared/ui/app-message/app-message';
 import { ForgotPasswordStore } from '../../data-access';
 
 @Component({
   selector: 'auth-forgot-password',
   templateUrl: './forgot-password.html',
   providers: [ForgotPasswordStore],
-  imports: [MatFormFieldModule, RouterLink, MatInputModule, MatButtonModule, MatIconModule, FormField]
+  imports: [MatFormFieldModule, RouterLink, MatInputModule, MatButtonModule, MatIconModule, FormField, Message]
 })
 export class AuthForgotPassword {
   protected readonly authStore = inject(ForgotPasswordStore);

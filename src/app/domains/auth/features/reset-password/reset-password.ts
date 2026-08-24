@@ -5,13 +5,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Message } from '@/app/shared/ui/app-message/app-message';
 import { ResetPasswordStore } from '../../data-access';
 
 @Component({
   selector: 'auth-reset-password',
   templateUrl: './reset-password.html',
   providers: [ResetPasswordStore],
-  imports: [RouterLink, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, FormField]
+  imports: [RouterLink, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, FormField, Message]
 })
 export class AuthResetPassword {
   private readonly route = inject(ActivatedRoute);
