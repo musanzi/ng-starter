@@ -1,0 +1,5 @@
+<div class="min-h-screen bg-white text-neutral-950">
+  <hero [isAuthenticated]="!!authStore.user()" (signOut)="signOut()" />
+  <features />
+  <cta [isAuthenticated]="!!authStore.user()" />
+</div>

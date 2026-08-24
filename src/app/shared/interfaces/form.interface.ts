@@ -1,0 +1,26 @@
+export type IQuestionType = 'text' | 'textarea' | 'email' | 'number' | 'date' | 'select' | 'radio' | 'checkbox';
+
+export interface IQuestionTypeOption {
+  value: IQuestionType;
+  label: string;
+}
+
+export const OPTION_TYPES = new Set<IQuestionType>(['select', 'radio', 'checkbox']);
+
+export interface IFormAnswerOption {
+  label: string;
+  value: string;
+  checked: boolean;
+}
+
+export interface IFormAnswer {
+  name: string;
+  type: string;
+  required: boolean;
+  value: string;
+  options: IFormAnswerOption[];
+}
+
+export interface IFormAnswersModel {
+  answers: IFormAnswer[];
+}
