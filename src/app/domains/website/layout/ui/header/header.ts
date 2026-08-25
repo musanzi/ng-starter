@@ -2,7 +2,7 @@ import { Component, computed, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { NAVIGATION_LINKS } from '../../data';
+import { NAVIGATION_LINKS } from '../../data/navigation';
 
 @Component({
   selector: 'app-header',
@@ -30,19 +30,17 @@ export class Header {
   protected navLinkClasses(active: boolean): string {
     if (!this.isScrolled()) {
       return active
-        ? 'border-neutral-950 text-neutral-950  '
-        : 'border-transparent text-neutral-700 hover:border-neutral-400 hover:text-neutral-950   ';
+        ? 'border-white text-white'
+        : 'border-transparent text-white/80 hover:border-white/40 hover:text-white';
     }
 
     return active
-      ? 'border-primary-500 text-neutral-950 '
-      : 'border-transparent text-neutral-700 hover:border-neutral-300 hover:text-neutral-950   ';
+      ? 'border-primary-500 text-gray-950'
+      : 'border-transparent text-gray-700 hover:border-gray-300 hover:text-gray-950';
   }
 
   protected mobileNavLinkClasses(active: boolean): string {
-    return active
-      ? 'bg-primary-50 text-primary-700  '
-      : 'text-neutral-700 hover:bg-neutral-100 hover:text-neutral-950   ';
+    return active ? 'bg-primary-50 text-primary-700' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-950';
   }
 
   protected updateScrolledState(): void {

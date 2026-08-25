@@ -1,15 +1,19 @@
 <header
   class="fixed inset-x-0 top-0 z-50 border-b transition-[background-color,border-color,box-shadow] duration-300"
-  [class]="
-    solidHeader()
-      ? 'border-neutral-200/80 bg-white/95 shadow-sm backdrop-blur-xl  '
-      : 'border-transparent bg-transparent'
-  ">
+  [class.border-transparent]="!solidHeader()"
+  [class.bg-transparent]="!solidHeader()"
+  [class.border-gray-200/80]="solidHeader()"
+  [class.bg-white/95]="solidHeader()"
+  [class.shadow-sm]="solidHeader()"
+  [class.backdrop-blur-xl]="solidHeader()">
   <nav class="mx-auto flex max-w-screen-2xl items-center py-4 justify-between px-6 sm:px-8 lg:px-16 xl:px-24 2xl:px-32">
-    <a routerLink="/" class="flex items-center gap-1" (click)="closeMenu()">
-      <!-- Logo intentionally omitted until a brand asset is available. -->
-      <span class="text-xl font-bold tracking-tight text-neutral-950 transition-colors md:text-3xl">
-        starter<span class="text-primary-500">.</span>
+    <a routerLink="/" class="flex items-center gap-2" aria-label="FIF 2026, accueil" (click)="closeMenu()">
+      <!-- <img src="/images/favicon.png" alt="" class="size-6 object-contain md:size-8" /> -->
+      <span
+        class="text-xl font-bold tracking-tight transition-colors md:text-2xl"
+        [class.text-white]="!isScrolled()"
+        [class.text-gray-950]="solidHeader()">
+        Starter <span class="text-primary-400">2026</span>
       </span>
     </a>
 
@@ -28,29 +32,23 @@
       }
     </div>
 
-    <div class="hidden items-center gap-1 text-neutral-950 lg:flex">
-      <a matButton="filled" routerLink="/auth/sign-in" class="rounded-md font-semibold py-2.5 px-4">
+    <div class="hidden items-center gap-2 sm:flex">
+      <a matButton="filled" routerLink="/auth/sign-in" class="rounded-md px-4 py-2.5 font-semibold">
         Join the community
       </a>
     </div>
 
     <button
       type="button"
-      class="flex size-8 items-center justify-center rounded-full border shadow-sm transition-colors lg:hidden"
-      [class]="
-        !solidHeader()
-          ? 'border-neutral-300 bg-white/10 text-neutral-950 hover:bg-black/5   '
-          : 'border-neutral-200 bg-white text-neutral-900 hover:bg-neutral-100    '
-      "
+      class="flex size-8 items-center justify-center rounded-full border shadow-sm transition-colors sm:hidden"
+      [class]="!isScrolled() ? 'border-white/25 bg-white/10 text-white' : 'border-gray-200 bg-white text-gray-900'"
       (click)="toggleMenu()">
       <mat-icon [svgIcon]="isMenuOpen() ? 'x' : 'menu'" />
     </button>
   </nav>
 
   @if (isMenuOpen()) {
-    <div
-      id="mobile-navigation"
-      class="border-t border-neutral-200 bg-white px-6 py-6 text-neutral-950 shadow-xl lg:hidden">
+    <div id="mobile-navigation" class="border-t border-gray-100 bg-white px-6 py-6 shadow-xl sm:hidden">
       <div class="flex flex-col gap-1">
         @for (link of links; track link.label) {
           <a
@@ -68,13 +66,13 @@
           </a>
         }
       </div>
-      <div class="mt-3 grid grid-cols-1 gap-3">
+      <div class="mt-5 grid grid-cols-1 gap-3 border-t border-gray-100 pt-5">
         <a
           routerLink="/auth/sign-in"
-          class="flex items-center justify-center gap-2 rounded-md border border-neutral-200 px-4 py-3 text-center font-semibold text-neutral-900 transition-colors hover:bg-neutral-100"
+          class="flex items-center justify-center gap-2 rounded-md border border-gray-200 px-4 py-3 text-center font-semibold"
           (click)="closeMenu()">
           <mat-icon class="size-5" svgIcon="log-in" />
-          Sign in
+          Connexion
         </a>
       </div>
     </div>

@@ -1,18 +1,18 @@
-<section class="border-b border-neutral-200 bg-white">
+<section class="relative isolate min-h-[calc(100svh-5rem)] overflow-hidden text-white">
+  <img src="/images/hero.jpg" alt="Hero Banner" class="absolute inset-0 -z-30 size-full object-cover object-center" />
+  <div class="absolute inset-0 -z-10 bg-gray-900/70"></div>
   <div
     class="mx-auto grid min-h-[calc(100vh-4rem)] w-full max-w-7xl items-center gap-12 px-4 py-14 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8 lg:py-16">
     <div class="max-w-2xl">
       <div
-        class="inline-flex items-center gap-2 rounded border border-primary-200 bg-primary-50 px-3 py-1 text-sm font-medium text-primary-800">
+        class="inline-flex items-center gap-2 rounded border border-primary-500 bg-primary-200/90 px-3 py-1 text-sm font-medium text-primary-900">
         <mat-icon class="size-4" svgIcon="sparkles" />
         Angular base ready for your next products
       </div>
 
-      <h1 class="mt-6 text-5xl font-bold leading-10 text-neutral-950">
-        Start with a clear, structured application ready to scale.
-      </h1>
+      <h1 class="mt-6 text-5xl font-bold leading-10">Start with a clear, structured application ready to scale.</h1>
 
-      <p class="mt-6 max-w-xl text-xl leading-7 text-neutral-600">
+      <p class="mt-6 max-w-xl text-xl leading-7">
         A simple starter with authentication, dashboard, polished styling, and modern Angular foundations so you can
         build without starting from zero.
       </p>
@@ -31,7 +31,7 @@
             Sign in
             <mat-icon class="ml-2 size-4" svgIcon="arrow-right" />
           </a>
-          <a matButton="outlined" routerLink="/auth/sign-up">Create account</a>
+          <a matButton="outlined" class="text-white" routerLink="/auth/sign-up">Create account</a>
         }
       </div>
     </div>
