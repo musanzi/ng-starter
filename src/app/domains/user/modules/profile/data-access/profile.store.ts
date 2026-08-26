@@ -1,11 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthStore } from '@/app/domains/auth/data-access';
-import { IUpdateProfilePayload } from '@/app/domains/auth/interfaces';
 import { patchState, signalStore, withMethods, withProps, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { catchError, concatMap, EMPTY, finalize, pipe, tap } from 'rxjs';
-import { IProfileResponse, IProfileState, IUpdatePasswordPayload } from '../interfaces';
+import { IProfileResponse, IProfileState, IUpdatePasswordPayload, IUpdateProfilePayload } from '../interfaces';
 
 const initialState: IProfileState = {
   isUpdatingProfile: false,

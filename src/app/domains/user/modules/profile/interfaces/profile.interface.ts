@@ -16,6 +16,8 @@ export interface IUpdatePasswordPayload {
 
 export type IProfileResponse = IUser;
 
+export type IUpdateProfilePayload = Partial<IUser>;
+
 export interface IProfileState {
   isUpdatingProfile: boolean;
   isUpdatingPassword: boolean;

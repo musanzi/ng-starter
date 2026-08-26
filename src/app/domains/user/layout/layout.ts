@@ -4,8 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
 import { RouterOutlet } from '@angular/router';
 import { Media } from '@/app/core/media';
-import { PageLoader } from '@/app/shared/ui/page-loader/page-loader';
-import { Sidebar } from '@/app/shared/ui/sidebar/sidebar';
+import { PageLoader, Sidebar } from '@/app/shared/ui';
 import { NAVIGATION } from './data/navigation';
 
 @Component({

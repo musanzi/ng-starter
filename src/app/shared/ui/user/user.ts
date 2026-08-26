@@ -12,6 +12,7 @@ import { RouterLink } from '@angular/router';
   templateUrl: './user.html'
 })
 export class User {
+  profileRoute = input.required<string>();
   authStore = inject(AuthStore);
 
   user = computed(() => this.authStore.user());
@@ -21,9 +22,6 @@ export class User {
       ? `${environment.apiUrl}/uploads/profiles/${this.user()?.avatar}`
       : '/images/avatar.webp';
   });
-
-  signOutLabel = input('Sign out');
-  profileRoute = input.required<string>();
 
   signOut(): void {
     this.authStore.signOut();

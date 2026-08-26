@@ -24,3 +24,5 @@ export interface IProfileState {
   profileError: string;
   passwordError: string;
 }
+
+export type IUpdateProfilePayload = Partial<IUser>;

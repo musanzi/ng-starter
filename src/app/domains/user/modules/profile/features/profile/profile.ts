@@ -6,11 +6,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { AuthStore } from '@/app/domains/auth/data-access';
-import { IUpdateProfilePayload } from '@/app/domains/auth/interfaces';
 import { Message } from '@/app/shared/ui/app-message/app-message';
 import { environment } from '@/environments/environment';
 import { ProfileStore } from '../../data-access/profile.store';
-import { IProfileFormModel, IUpdatePasswordFormModel } from '../../interfaces';
+import { IProfileFormModel, IUpdatePasswordFormModel, IUpdateProfilePayload } from '../../interfaces';
 
 @Component({
   imports: [Message, FormField, MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule],
