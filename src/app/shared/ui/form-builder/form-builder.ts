@@ -48,7 +48,7 @@ export class FormBuilder {
   protected questionsCount = computed(() => this.value().reduce((count, section) => count + section.fields.length, 0));
 
   protected addSection(): void {
-    this.value.update((sections) => [...sections, { phase: `Section ${sections.length + 1}`, fields: [] }]);
+    this.value.update((sections) => [{ phase: `Section ${sections.length + 1}`, fields: [] }, ...sections]);
   }
 
   protected updateSection(sectionIndex: number, phase: string): void {
