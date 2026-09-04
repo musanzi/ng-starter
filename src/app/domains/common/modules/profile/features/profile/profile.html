@@ -49,14 +49,14 @@
     </div>
 
     @if (store.profileImageError()) {
-      <app-message
+      <message
         class="mb-6"
         type="error"
         title="Échec de la mise à jour"
         [message]="store.profileImageError()"
         (dismissed)="store.clearProfileImageMessage()" />
     } @else if (store.profileImageUpdated()) {
-      <app-message
+      <message
         class="mb-6"
         type="success"
         title="Photo mise à jour"
@@ -78,14 +78,14 @@
 
         <mat-card-content class="p-6">
           @if (store.profileError()) {
-            <app-message
+            <message
               class="mb-5"
               type="error"
               title="Échec de la mise à jour"
               [message]="store.profileError()"
               (dismissed)="store.clearProfileMessage()" />
           } @else if (store.profileUpdated()) {
-            <app-message
+            <message
               class="mb-5"
               type="success"
               title="Profil mis à jour"
@@ -110,23 +110,7 @@
                   <mat-error>{{ profileForm.email().errors()[0].message }}</mat-error>
                 }
               </mat-form-field>
-
-              <mat-form-field appearance="outline">
-                <mat-label>Téléphone</mat-label>
-                <input matInput type="tel" [formField]="profileForm.phone_number" autocomplete="tel" />
-              </mat-form-field>
-
-              <mat-form-field appearance="outline">
-                <mat-label>Adresse</mat-label>
-                <input matInput [formField]="profileForm.address" autocomplete="street-address" />
-              </mat-form-field>
             </div>
-
-            <mat-form-field appearance="outline">
-              <mat-label>Biographie</mat-label>
-              <textarea matInput rows="5" [formField]="profileForm.bio"></textarea>
-            </mat-form-field>
-
             <div class="flex justify-end border-t border-neutral-200 pt-5">
               <button
                 class="w-full sm:w-auto"
@@ -156,14 +140,14 @@
 
         <mat-card-content class="p-6">
           @if (store.passwordError()) {
-            <app-message
+            <message
               class="mb-5"
               type="error"
               title="Échec de la mise à jour"
               [message]="store.passwordError()"
               (dismissed)="store.clearPasswordMessage()" />
           } @else if (store.passwordUpdated()) {
-            <app-message
+            <message
               class="mb-5"
               type="success"
               title="Mot de passe mis à jour"

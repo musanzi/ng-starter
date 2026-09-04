@@ -6,10 +6,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { AuthStore } from '@/app/domains/auth/data-access/auth.store';
-import { Message } from '@/app/shared/ui/message/message';
 import { environment } from '@/environments/environment';
 import { ProfileStore } from '../../data-access/profile.store';
 import { IProfileFormModel, IUpdatePasswordFormModel, IUpdateProfilePayload } from '../../interfaces';
+import { Message } from '@/app/shared/ui';
 
 @Component({
   imports: [Message, FormField, MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule],
@@ -24,17 +24,12 @@ export default class Profile {
 
   protected readonly profileImageUrl = computed(() => {
     const user = this.authStore.user();
-    return user?.profile
-      ? `${environment.apiUrl}/uploads/profiles/${user.profile}?v=${encodeURIComponent(user.updated_at)}`
-      : '/images/avatar.webp';
+    return user?.avatar ? `${environment.apiUrl}/uploads/profiles/${user.avatar}` : '/images/avatar.webp';
   });
 
   protected readonly profileModel = signal<IProfileFormModel>({
     name: this.user?.name ?? '',
-    email: this.user?.email ?? '',
-    phone_number: this.user?.phone_number ?? '',
-    address: this.user?.address ?? '',
-    bio: this.user?.bio ?? ''
+    email: this.user?.email ?? ''
   });
 
   protected readonly profileForm = form(this.profileModel, (schemaPath) => {
@@ -78,10 +73,7 @@ export default class Profile {
       const value = formState().value();
       const payload: IUpdateProfilePayload = {
         name: value.name.trim(),
-        email: value.email.trim(),
-        phone_number: value.phone_number.trim() || null,
-        address: value.address.trim() || null,
-        bio: value.bio.trim() || null
+        email: value.email.trim()
       };
 
       this.store.updateProfile(payload);

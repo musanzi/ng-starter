@@ -3,9 +3,6 @@ import { IUser } from '@/app/shared/interfaces';
 export interface IProfileFormModel {
   name: string;
   email: string;
-  phone_number: string;
-  address: string;
-  bio: string;
 }
 
 export interface IUpdatePasswordFormModel {

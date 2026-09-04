@@ -5,9 +5,9 @@ import { MESSAGE_STYLES } from '../../data';
 import { IMessageType } from '../../interfaces';
 
 @Component({
-  selector: 'app-message',
+  selector: 'message',
   imports: [MatButtonModule, MatIconModule],
-  templateUrl: './app-message.html',
+  templateUrl: './message.html',
   host: { class: 'block' }
 })
 export class Message {

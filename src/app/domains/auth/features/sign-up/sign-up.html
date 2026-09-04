@@ -92,7 +92,7 @@
     </div>
 
     @if (authStore.error(); as error) {
-      <app-message class="mt-4" [message]="error" (dismissed)="authStore.clearError()" />
+      <message class="mt-4" [message]="error" (dismissed)="authStore.clearError()" />
     }
 
     <button
