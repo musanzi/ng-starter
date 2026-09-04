@@ -3,6 +3,9 @@ import { IUser } from '@/app/shared/interfaces';
 export interface IProfileFormModel {
   name: string;
   email: string;
+  phone_number: string;
+  address: string;
+  bio: string;
 }
 
 export interface IUpdatePasswordFormModel {
@@ -14,15 +17,24 @@ export interface IUpdatePasswordPayload {
   password: string;
 }
 
-export type IProfileResponse = IUser;
+export type IUpdateProfilePayload = Partial<IUser>;
+
+export interface IProfileResponse {
+  data: IUser;
+}
+
+export interface IProfileImageResponse {
+  data: IUser;
+}
 
 export interface IProfileState {
   isUpdatingProfile: boolean;
+  isUpdatingProfileImage: boolean;
   isUpdatingPassword: boolean;
   profileUpdated: boolean;
+  profileImageUpdated: boolean;
   passwordUpdated: boolean;
   profileError: string;
+  profileImageError: string;
   passwordError: string;
 }
-
-export type IUpdateProfilePayload = Partial<IUser>;
