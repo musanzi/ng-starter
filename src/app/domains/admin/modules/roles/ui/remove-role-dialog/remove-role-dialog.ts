@@ -4,7 +4,6 @@ import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { IRemoveRoleDialogData } from '../../interfaces';
 
 @Component({
-  selector: 'app-remove-role-dialog',
   imports: [MatButtonModule, MatDialogModule],
   templateUrl: './remove-role-dialog.html'
 })

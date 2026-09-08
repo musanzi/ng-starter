@@ -4,11 +4,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'hero',
+  selector: 'landing-hero',
   imports: [RouterLink, MatButtonModule, MatIconModule],
   templateUrl: './hero.html'
 })
-export class Hero {
+export class LandingHero {
   isAuthenticated = input(false);
   isLoading = input(false);
 

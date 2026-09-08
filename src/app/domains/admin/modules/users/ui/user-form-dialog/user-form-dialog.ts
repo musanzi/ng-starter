@@ -8,7 +8,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { IUserDialogData, IUserDialogResult, IUserPayload } from '../../interfaces';
 
 @Component({
-  selector: 'app-user-form-dialog',
   imports: [FormField, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatSelectModule],
   templateUrl: './user-form-dialog.html'
 })

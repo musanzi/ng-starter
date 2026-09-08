@@ -5,14 +5,14 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { NAVIGATION_LINKS } from '../../data/navigation';
 
 @Component({
-  selector: 'app-header',
+  selector: 'website-header',
   imports: [MatButtonModule, MatIcon, RouterLink, RouterLinkActive],
   host: {
     '(window:scroll)': 'updateScrolledState()'
   },
   templateUrl: './header.html'
 })
-export class Header {
+export class WebsiteHeader {
   protected isScrolled = signal(false);
   protected isMenuOpen = signal(false);
 

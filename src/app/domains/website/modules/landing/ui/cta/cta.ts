@@ -4,10 +4,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'cta',
+  selector: 'landing-cta',
   imports: [RouterLink, MatButtonModule, MatIconModule],
   templateUrl: './cta.html'
 })
-export class Cta {
+export class LandingCta {
   isAuthenticated = input(false);
 }

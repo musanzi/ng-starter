@@ -4,7 +4,6 @@ import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { IRemoveUserDialogData } from '../../interfaces';
 
 @Component({
-  selector: 'app-remove-user-dialog',
   imports: [MatButtonModule, MatDialogModule],
   templateUrl: './remove-user-dialog.html'
 })

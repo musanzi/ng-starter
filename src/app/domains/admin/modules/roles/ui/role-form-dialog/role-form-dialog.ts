@@ -7,7 +7,6 @@ import { MatInputModule } from '@angular/material/input';
 import { IRoleDialogData, IRoleDialogResult, IRolePayload } from '../../interfaces';
 
 @Component({
-  selector: 'app-role-form-dialog',
   imports: [FormField, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule],
   templateUrl: './role-form-dialog.html'
 })
