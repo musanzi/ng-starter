@@ -3,9 +3,9 @@
 /* -------------------------------------------------------------------------- */
 @theme {
   /* Font family */
-  --font-sans: 'Lato', system-ui;
+  --font-sans: 'Roboto', system-ui;
 
-  --font-display: 'Lato', system-ui;
+  --font-display: 'Roboto', system-ui;
 
   --font-mono: ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
