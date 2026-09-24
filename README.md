@@ -10,7 +10,7 @@ An opinionated Angular starter for public websites, authentication flows, and ro
 - Route guards for guests, authenticated users, and administrators
 - User profile and password management
 - Admin dashboard, user management, role management, and CSV export
-- Responsive Angular Material layouts with bundled Geist fonts and Lucide icons
+- Responsive Angular Material layouts with Lato fonts and Lucide icons
 - Express production server and development/production Docker configurations
 
 ## Tech stack
@@ -113,7 +113,7 @@ Global styles enter through `src/styles/styles.css`, which loads:
 - Project typography and Material token overrides
 - Lucide icon styles
 
-The application bundles Geist fonts under `public/fonts`. Lucide SVG icons are registered centrally through `provideIcons()`. `provideTheming()` generates primary and error tonal palettes as CSS custom properties; change its seed colors in `src/app/app.config.ts` to rebrand the application.
+The application loads Lato fonts from Google Fonts via `src/index.html`. Lucide SVG icons are registered centrally through `provideIcons()`. `provideTheming()` generates primary and error tonal palettes as CSS custom properties; change its seed colors in `src/app/app.config.ts` to rebrand the application.
 
 Use Angular Material when adding interactive UI elements, with Tailwind utilities for layout and presentation.
 

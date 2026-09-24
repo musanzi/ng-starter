@@ -3,14 +3,11 @@
 /* -------------------------------------------------------------------------- */
 @theme {
   /* Font family */
-  --font-sans: Geist, system-ui;
-  --font-sans--font-feature-settings: 'salt';
+  --font-sans: 'Lato', system-ui;
 
-  --font-display: Geist, system-ui;
-  --font-display--font-feature-settings: 'salt';
+  --font-display: 'Lato', system-ui;
 
-  --font-mono: 'Geist Mono', ui-monospace;
-  --font-mono--font-feature-settings: 'ss01', 'ss02', 'cv02', 'cv06';
+  --font-mono: ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
   /* Font configuration */
   --font-smoothing: antialiased;

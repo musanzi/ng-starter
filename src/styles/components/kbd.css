@@ -4,7 +4,6 @@
   /* ------------------------------------------------------------------------ */
   kbd {
     font-family: var(--kbd-font-family);
-    font-feature-settings: var(--kbd-font-feature-settings);
     font-optical-sizing: var(--kbd-font-optical-sizing);
     -webkit-font-smoothing: var(--kbd-font-smoothing);
 
@@ -33,7 +32,6 @@
   kbd {
     /* Typography */
     --kbd-font-family: var(--font-sans);
-    --kbd-font-feature-settings: var(--font-sans--font-feature-settings);
     --kbd-font-optical-sizing: var(--font-optical-sizing);
     --kbd-font-smoothing: var(--font-smoothing);
 

@@ -419,7 +419,6 @@
     height: fit-content; /* Prevents the height from stretching when inside a Flex/Grid parent */
 
     font-family: var(--form-field-font-family);
-    font-feature-settings: var(--form-field-font-feature-settings);
     font-optical-sizing: var(--form-field-font-optical-sizing);
     -webkit-font-smoothing: var(--form-field-font-smoothing);
 
@@ -699,7 +698,6 @@
   .mat-mdc-form-field {
     /* Typography */
     --form-field-font-family: var(--font-sans);
-    --form-field-font-feature-settings: var(--font-sans--font-feature-settings);
     --form-field-font-optical-sizing: var(--font-optical-sizing);
     --form-field-font-smoothing: var(--font-smoothing);
 
