@@ -18,7 +18,7 @@ import { PageLoader } from '@/app/shared/ui';
       </div>
     } @placeholder {
       <app-page-loader />
-    } @loading (minimum 500ms) {
+    } @loading {
       <app-page-loader />
     }
   `

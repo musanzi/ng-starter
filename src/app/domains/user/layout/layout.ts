@@ -49,7 +49,7 @@ import { NAVIGATION } from './data/navigation';
       </mat-sidenav-container>
     } @placeholder {
       <app-page-loader />
-    } @loading (minimum 500ms) {
+    } @loading {
       <app-page-loader />
     }
   `
