@@ -7,6 +7,6 @@ services:
       context: .
       target: production
     restart: unless-stopped
-    command: pnpm start:prod --host=0.0.0
+    command: pnpm start:prod --host=0.0.0.0
     ports:
       - '4200:4200'
