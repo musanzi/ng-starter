@@ -1,15 +1,34 @@
 node_modules
-dist
 .pnpm-store
 .git
+.github
 .env
+.env.*
 *.log
 npm-debug.log*
 pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .DS_Store
-.nx
+
+# build outputs
+dist
+out-tsc
 .angular
+coverage
+*.tsbuildinfo
+
+# tooling / repo meta (not needed in the image, keeps build cache stable)
+Dockerfile
+.dockerignore
+compose*.yml
+.gitignore
 .husky
 .claude
+.nx
+.prettierrc
+README.md
+AGENTS.md
+commitlint.config.js
+eslint.config.ts
+prettier.config.ts
