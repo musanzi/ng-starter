@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
 import { Message } from '@/app/shared/ui';
-import { ForgotPasswordStore } from '../../data-access';
+import { ForgotPasswordStore } from '../../data-access/forgot-password.store';
 
 @Component({
   selector: 'auth-forgot-password',

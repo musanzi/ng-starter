@@ -16,7 +16,7 @@ const routes: Routes = [
             asideFootnote: 'Keep a consistent authentication flow while you build the rest of your product.'
           }
         },
-        loadComponent: () => import('./features/sign-in/sign-in').then((c) => c.AuthSignIn)
+        loadComponent: () => import('./modules/sign-in/features/sign-in/sign-in').then((c) => c.AuthSignIn)
       },
       {
         path: 'sign-up',
@@ -29,7 +29,7 @@ const routes: Routes = [
             asideFootnote: 'Structure your application with authentication flows already aligned to your interface.'
           }
         },
-        loadComponent: () => import('./features/sign-up/sign-up').then((c) => c.AuthSignUp)
+        loadComponent: () => import('./modules/sign-up/features/sign-up/sign-up').then((c) => c.AuthSignUp)
       },
       {
         path: 'forgot-password',
@@ -42,7 +42,7 @@ const routes: Routes = [
               'The flow stays clear, direct, and consistent with the rest of the authentication experience.'
           }
         },
-        loadComponent: () => import('./features/forgot-password/forgot-password').then((c) => c.AuthForgotPassword)
+        loadComponent: () => import('./modules/forgot-password/features/forgot-password/forgot-password').then((c) => c.AuthForgotPassword)
       },
       {
         path: 'forgot-password-sent',
@@ -55,7 +55,7 @@ const routes: Routes = [
           }
         },
         loadComponent: () =>
-          import('./features/forgot-password-sent/forgot-password-sent').then((c) => c.AuthForgotPasswordSent)
+          import('./modules/forgot-password-sent/features/forgot-password-sent/forgot-password-sent').then((c) => c.AuthForgotPasswordSent)
       },
       {
         path: 'reset-password',
@@ -67,7 +67,7 @@ const routes: Routes = [
             asideFootnote: 'Error states and primary actions stay visible without changing business logic.'
           }
         },
-        loadComponent: () => import('./features/reset-password/reset-password').then((c) => c.AuthResetPassword)
+        loadComponent: () => import('./modules/reset-password/features/reset-password/reset-password').then((c) => c.AuthResetPassword)
       }
     ]
   }

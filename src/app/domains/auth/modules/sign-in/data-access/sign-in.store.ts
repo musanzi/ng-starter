@@ -7,7 +7,7 @@ import { patchState, signalStore, withMethods, withProps, withState } from '@ngr
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { catchError, concatMap, EMPTY, finalize, pipe, tap } from 'rxjs';
 import { ISignInPayload } from '../interfaces';
-import { AuthStore } from './auth.store';
+import { AuthStore } from '@/app/domains/auth/data-access';
 
 export const SignInStore = signalStore(
   withState({ isLoading: false, error: '' }),
