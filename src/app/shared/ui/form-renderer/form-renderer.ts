@@ -1,10 +1,10 @@
 import { Component, computed, input, linkedSignal } from '@angular/core';
-import { applyEach, form, FormField, required, validate } from '@angular/forms/signals';
+import { applyEach, form, FormField, required, submit, validate } from '@angular/forms/signals';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
-import { IField, IForm, IFormAnswer, IFormAnswersModel } from '@/app/shared/interfaces';
+import { IField, IForm, IFormAnswer, IFormAnswersModel, IFormResponses } from '@/app/shared/interfaces';
 
 @Component({
   selector: 'form-renderer',
@@ -13,6 +13,8 @@ import { IField, IForm, IFormAnswer, IFormAnswersModel } from '@/app/shared/inte
 })
 export class FormRenderer {
   sections = input.required<IForm[]>();
+  initialResponses = input<IFormResponses>({});
+  readonly isEmpty = computed(() => !this.sections().some((section) => section.fields.length > 0));
 
   private answersModel = linkedSignal<IFormAnswersModel>(() => ({
     answers: this.sections().flatMap((section) => section.fields.map((field) => this.buildAnswer(field)))
@@ -47,10 +49,16 @@ export class FormRenderer {
       this.answersModel().answers.map((answer) => [
         answer.name,
         answer.type === 'checkbox'
-          ? answer.options.filter((option) => option.checked).map((option) => option.value)
-          : answer.value
+          ? answer.options.filter((option) => option.checked).map((option) => option.label)
+          : this.responseValue(answer)
       ])
     );
+  }
+
+  submit(handler: (responses: IFormResponses) => void | Promise<void>): void {
+    if (this.isEmpty()) return;
+
+    submit(this.answerForm, async () => handler(this.responses()));
   }
 
   protected fieldInputType(type: string): string {
@@ -58,12 +66,25 @@ export class FormRenderer {
   }
 
   private buildAnswer(field: IField): IFormAnswer {
+    const initial = this.initialResponses()[field.name];
+    const options = (field.options ?? []).map((option) => ({
+      ...option,
+      checked: Array.isArray(initial) && (initial.includes(option.value) || initial.includes(option.label))
+    }));
+    const initialString = typeof initial === 'string' ? initial : '';
+    const matched = options.find((option) => option.value === initialString || option.label === initialString);
     return {
       name: field.name,
       type: field.type,
       required: field.required ?? false,
-      value: '',
-      options: (field.options ?? []).map((option) => ({ ...option, checked: false }))
+      value: matched?.value ?? initialString,
+      options
     };
+  }
+
+  private responseValue(answer: IFormAnswer): string {
+    if (answer.type !== 'select' && answer.type !== 'radio') return answer.value;
+    const selected = answer.options.find((option) => option.value === answer.value);
+    return selected?.label ?? answer.value;
   }
 }
