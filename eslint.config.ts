@@ -8,7 +8,7 @@ import tseslint from 'typescript-eslint';
 
 export default defineConfig(
   // Global ignores
-  globalIgnores(['.angular/', 'dist/']),
+  globalIgnores(['.angular/', 'dist/', 'src/app/core/api/generated/']),
 
   // Base configs
   eslint.configs.recommended,

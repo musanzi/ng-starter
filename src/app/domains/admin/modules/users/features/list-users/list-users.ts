@@ -7,9 +7,10 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
+import { IUserResponse } from '@/app/core/api';
 import { filter } from 'rxjs';
 import { UsersStore } from '../../data-access/users.store';
-import { IQueryParams, IRemoveUserDialogData, IUserDialogData, IUserDialogResult, IUserRow } from '../../interfaces';
+import { IUsersQueryParams, IRemoveUserDialogData, IUserDialogData, IUserDialogResult } from '../../interfaces';
 import { RemoveUserDialog } from '../../ui/remove-user-dialog/remove-user-dialog';
 import { UserFormDialog } from '../../ui/user-form-dialog/user-form-dialog';
 
@@ -28,7 +29,7 @@ export default class Users implements OnInit {
   protected readonly debouncedQuery = debounced(this.q, 300);
   protected readonly displayedColumns = ['name', 'email', 'roles', 'createdAt', 'actions'];
 
-  private readonly queryParams = computed<IQueryParams>(() => ({
+  private readonly queryParams = computed<IUsersQueryParams>(() => ({
     page: this.page(),
     q: this.debouncedQuery.value()
   }));
@@ -57,7 +58,7 @@ export default class Users implements OnInit {
       .subscribe(({ payload }) => this.store.createUser(payload));
   }
 
-  protected openUpdateDialog(user: IUserRow): void {
+  protected openUpdateDialog(user: IUserResponse): void {
     this.dialog
       .open<UserFormDialog, IUserDialogData, IUserDialogResult>(UserFormDialog, {
         data: { roles: this.store.roles(), user },
@@ -71,7 +72,7 @@ export default class Users implements OnInit {
       .subscribe(({ payload }) => this.store.updateUser({ id: user.id, payload }));
   }
 
-  protected openRemoveDialog(user: IUserRow): void {
+  protected openRemoveDialog(user: IUserResponse): void {
     this.dialog
       .open<RemoveUserDialog, IRemoveUserDialogData, boolean>(RemoveUserDialog, {
         data: { user },

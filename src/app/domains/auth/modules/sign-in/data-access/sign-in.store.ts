@@ -1,12 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { IUser } from '@/app/shared/interfaces';
+import { Router } from '@angular/router';
 import { environment } from '@/environments/environment';
 import { patchState, signalStore, withMethods, withProps, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { catchError, concatMap, EMPTY, finalize, pipe, tap } from 'rxjs';
-import { ISignInPayload } from '../interfaces';
+import { getApiErrorMessage, ISignInDto, IUserResponse } from '@/app/core/api';
 import { AuthStore } from '@/app/domains/auth/data-access';
 
 export const SignInStore = signalStore(
@@ -14,22 +13,21 @@ export const SignInStore = signalStore(
   withProps(() => ({
     _http: inject(HttpClient),
     _router: inject(Router),
-    _route: inject(ActivatedRoute),
     _authStore: inject(AuthStore),
     googleSignInUrl: `${environment.apiUrl}/auth/signin/google`
   })),
-  withMethods(({ _http, _authStore, _route, _router, ...store }) => ({
-    signIn: rxMethod<ISignInPayload>(
+  withMethods(({ _http, _authStore, _router, ...store }) => ({
+    signIn: rxMethod<ISignInDto>(
       pipe(
         concatMap((payload) => {
           patchState(store, { isLoading: true, error: '' });
-          return _http.post<IUser>('/auth/signin', payload).pipe(
+          return _http.post<IUserResponse>('/auth/signin', payload).pipe(
             tap((user) => {
               _authStore.setUser(user);
               return _authStore.isAdmin() ? _router.navigate(['/admin']) : _router.navigate(['/user']);
             }),
-            catchError(() => {
-              patchState(store, { error: 'Incorrect email address or password.' });
+            catchError((error: unknown) => {
+              patchState(store, { error: getApiErrorMessage(error, 'Incorrect email address or password.') });
               return EMPTY;
             }),
             finalize(() => patchState(store, { isLoading: false }))

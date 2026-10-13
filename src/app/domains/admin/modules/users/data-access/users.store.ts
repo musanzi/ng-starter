@@ -1,19 +1,17 @@
 import { DOCUMENT } from '@angular/common';
+import {
+  getApiErrorMessage,
+  ICreateUserDto,
+  IUsersControllerFindAllResponse,
+  IRolesControllerFindAllResponse,
+  IUserResponse
+} from '@/app/core/api';
 import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { patchState, signalStore, withMethods, withProps, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { catchError, concatMap, EMPTY, finalize, pipe, switchMap, tap } from 'rxjs';
-import {
-  IQueryParams,
-  IRemoveUserCommand,
-  IRolesLookupResponse,
-  IUpdateUserCommand,
-  IUserPayload,
-  IUserResponse,
-  IUsersResponse,
-  IUsersState
-} from '../interfaces';
+import { IUsersQueryParams, IRemoveUserCommand, IUpdateUserCommand, IUsersState } from '../interfaces';
 
 const initialState: IUsersState = {
   users: [],
@@ -34,18 +32,20 @@ export const UsersStore = signalStore(
     _http: inject(HttpClient)
   })),
   withMethods(({ _document, _http, ...store }) => ({
-    loadUsers: rxMethod<IQueryParams>(
+    loadUsers: rxMethod<IUsersQueryParams>(
       pipe(
         tap(() => patchState(store, { isLoading: true, error: '' })),
         switchMap((params) =>
-          _http.get<IUsersResponse>('/users', { params: { page: params.page, q: params.q } }).pipe(
-            tap(([users, usersCount]) => patchState(store, { users, usersCount })),
-            catchError(() => {
-              patchState(store, { error: 'Unable to load users. Please try again.' });
-              return EMPTY;
-            }),
-            finalize(() => patchState(store, { isLoading: false }))
-          )
+          _http
+            .get<IUsersControllerFindAllResponse['data']>('/users', { params: { page: params.page, q: params.q } })
+            .pipe(
+              tap(([users, usersCount]) => patchState(store, { users, usersCount })),
+              catchError((error: unknown) => {
+                patchState(store, { error: getApiErrorMessage(error, 'Unable to load users. Please try again.') });
+                return EMPTY;
+              }),
+              finalize(() => patchState(store, { isLoading: false }))
+            )
         )
       )
     ),
@@ -53,10 +53,10 @@ export const UsersStore = signalStore(
       pipe(
         tap(() => patchState(store, { isLoadingRoles: true, error: '' })),
         switchMap(() =>
-          _http.get<IRolesLookupResponse>('/roles').pipe(
+          _http.get<IRolesControllerFindAllResponse['data']>('/roles').pipe(
             tap(([roles]) => patchState(store, { roles })),
-            catchError(() => {
-              patchState(store, { error: 'Unable to load roles.' });
+            catchError((error: unknown) => {
+              patchState(store, { error: getApiErrorMessage(error, 'Unable to load roles.') });
               return EMPTY;
             }),
             finalize(() => patchState(store, { isLoadingRoles: false }))
@@ -64,7 +64,7 @@ export const UsersStore = signalStore(
         )
       )
     ),
-    createUser: rxMethod<IUserPayload>(
+    createUser: rxMethod<ICreateUserDto>(
       pipe(
         concatMap((payload) => {
           patchState(store, { isSaving: true, error: '' });
@@ -75,8 +75,8 @@ export const UsersStore = signalStore(
                 usersCount: store.usersCount() + 1
               });
             }),
-            catchError(() => {
-              patchState(store, { error: 'Unable to create the user. Please try again.' });
+            catchError((error: unknown) => {
+              patchState(store, { error: getApiErrorMessage(error, 'Unable to create the user. Please try again.') });
               return EMPTY;
             }),
             finalize(() => patchState(store, { isSaving: false }))
@@ -94,8 +94,8 @@ export const UsersStore = signalStore(
                 users: store.users().map((currentUser) => (currentUser.id === id ? updatedUser : currentUser))
               });
             }),
-            catchError(() => {
-              patchState(store, { error: 'Unable to update the user. Please try again.' });
+            catchError((error: unknown) => {
+              patchState(store, { error: getApiErrorMessage(error, 'Unable to update the user. Please try again.') });
               return EMPTY;
             }),
             finalize(() => patchState(store, { isSaving: false }))
@@ -107,15 +107,15 @@ export const UsersStore = signalStore(
       pipe(
         concatMap(({ id }) => {
           patchState(store, { removingUserId: id, error: '' });
-          return _http.delete<void>(`/users/${id}`).pipe(
+          return _http.delete<null>(`/users/${id}`).pipe(
             tap(() =>
               patchState(store, {
                 users: store.users().filter((user) => user.id !== id),
                 usersCount: Math.max(0, store.usersCount() - 1)
               })
             ),
-            catchError(() => {
-              patchState(store, { error: 'Unable to delete the user. Please try again.' });
+            catchError((error: unknown) => {
+              patchState(store, { error: getApiErrorMessage(error, 'Unable to delete the user. Please try again.') });
               return EMPTY;
             }),
             finalize(() => patchState(store, { removingUserId: '' }))
@@ -139,8 +139,8 @@ export const UsersStore = signalStore(
               link.click();
               urlApi.revokeObjectURL(url);
             }),
-            catchError(() => {
-              patchState(store, { error: 'Unable to export users. Please try again.' });
+            catchError((error: unknown) => {
+              patchState(store, { error: getApiErrorMessage(error, 'Unable to export users. Please try again.') });
               return EMPTY;
             }),
             finalize(() => patchState(store, { isExporting: false }))

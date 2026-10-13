@@ -1,27 +1,9 @@
-import { IUser } from '@/app/shared/interfaces';
+import { ICreateUserDto, IUpdatePasswordDto } from '@/app/core/api';
 
-export interface IProfileFormModel {
-  name: string;
-  email: string;
-}
+export type IProfileFormModel = Pick<ICreateUserDto, 'name' | 'email'>;
 
-export interface IUpdatePasswordFormModel {
-  password: string;
+export interface IUpdatePasswordFormModel extends IUpdatePasswordDto {
   confirmPassword: string;
-}
-
-export interface IUpdatePasswordPayload {
-  password: string;
-}
-
-export type IUpdateProfilePayload = Partial<IUser>;
-
-export interface IProfileResponse {
-  data: IUser;
-}
-
-export interface IProfileImageResponse {
-  data: IUser;
 }
 
 export interface IProfileState {

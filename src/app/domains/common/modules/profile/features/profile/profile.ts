@@ -8,8 +8,9 @@ import { MatInputModule } from '@angular/material/input';
 import { AuthStore } from '@/app/domains/auth/data-access/auth.store';
 import { environment } from '@/environments/environment';
 import { ProfileStore } from '../../data-access/profile.store';
-import { IProfileFormModel, IUpdatePasswordFormModel, IUpdateProfilePayload } from '../../interfaces';
+import { IProfileFormModel, IUpdatePasswordFormModel } from '../../interfaces';
 import { Message } from '@/app/shared/ui';
+import { IUpdateUserDto } from '@/app/core/api';
 
 @Component({
   imports: [Message, FormField, MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule],
@@ -71,7 +72,7 @@ export default class Profile {
   protected onUpdateProfile(): void {
     submit(this.profileForm, async (formState) => {
       const value = formState().value();
-      const payload: IUpdateProfilePayload = {
+      const payload: IUpdateUserDto = {
         name: value.name.trim(),
         email: value.email.trim()
       };

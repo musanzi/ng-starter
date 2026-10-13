@@ -1,50 +1,44 @@
-import { IRole, IUser } from '@/app/shared/interfaces';
+import {
+  ICreateUserDto,
+  IRoleResponse,
+  IRolesControllerFindAllResponse,
+  IUpdateUserDto,
+  IUserResponse,
+  IUsersControllerFindAllResponse
+} from '@/app/core/api';
 
-export interface IQueryParams {
+// Local list controls and store commands reference generated API models.
+export interface IUsersQueryParams {
   page: number;
   q: string;
 }
 
-export interface IUserPayload {
-  email: string;
-  name: string;
-  roles: string[];
-}
-
-export type IUserRow = IUser;
-
-export type IUsersResponse = [IUserRow[], number];
-
-export type IUserResponse = IUserRow;
-
-export type IRolesLookupResponse = [IRole[], number];
-
 export interface IUpdateUserCommand {
-  id: string;
-  payload: IUserPayload;
+  id: IUserResponse['id'];
+  payload: IUpdateUserDto;
 }
 
-export interface IRemoveUserCommand {
-  id: string;
-}
+export type IRemoveUserCommand = Pick<IUserResponse, 'id'>;
+
+export type IUserFormModel = Required<Pick<ICreateUserDto, 'email' | 'name' | 'roles'>>;
 
 export interface IUserDialogData {
-  roles: IRole[];
-  user?: IUserRow;
+  roles: IRoleResponse[];
+  user?: IUserResponse;
 }
 
 export interface IUserDialogResult {
-  payload: IUserPayload;
+  payload: ICreateUserDto;
 }
 
 export interface IRemoveUserDialogData {
-  user: IUserRow;
+  user: IUserResponse;
 }
 
 export interface IUsersState {
-  users: IUserRow[];
-  usersCount: number;
-  roles: IRole[];
+  users: IUsersControllerFindAllResponse['data'][0];
+  usersCount: IUsersControllerFindAllResponse['data'][1];
+  roles: IRolesControllerFindAllResponse['data'][0];
   isLoading: boolean;
   isLoadingRoles: boolean;
   isSaving: boolean;

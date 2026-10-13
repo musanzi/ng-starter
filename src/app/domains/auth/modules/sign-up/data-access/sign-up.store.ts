@@ -1,11 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { IUser } from '@/app/shared/interfaces';
 import { patchState, signalStore, withMethods, withProps, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { catchError, concatMap, EMPTY, finalize, pipe, tap } from 'rxjs';
-import { ISignUpPayload } from '../interfaces';
+import { getApiErrorMessage, ISignUpDto, IUserResponse } from '@/app/core/api';
 
 export const SignUpStore = signalStore(
   withState({ isLoading: false, error: '' }),
@@ -14,17 +13,17 @@ export const SignUpStore = signalStore(
     _router: inject(Router)
   })),
   withMethods(({ _http, _router, ...store }) => ({
-    signUp: rxMethod<ISignUpPayload>(
+    signUp: rxMethod<ISignUpDto>(
       pipe(
         concatMap((payload) => {
           patchState(store, { isLoading: true, error: '' });
-          return _http.post<IUser>('/auth/signup', payload).pipe(
+          return _http.post<IUserResponse>('/auth/signup', payload).pipe(
             tap(() => {
               void _router.navigate(['/auth/sign-in']);
             }),
-            catchError(() => {
+            catchError((error: unknown) => {
               patchState(store, {
-                error: 'Unable to create your account. Check your information and try again.'
+                error: getApiErrorMessage(error, 'Unable to create your account. Check your information and try again.')
               });
               return EMPTY;
             }),

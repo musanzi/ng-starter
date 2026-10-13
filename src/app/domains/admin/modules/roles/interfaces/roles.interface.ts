@@ -1,36 +1,26 @@
-import { IRole } from '@/app/shared/interfaces';
-
-export interface IRolePayload {
-  name: string;
-}
-
-export type IRolesResponse = [IRole[], number];
-
-export type IRoleResponse = IRole;
+import { ICreateRoleDto, IRoleResponse, IRolesControllerFindAllResponse, IUpdateRoleDto } from '@/app/core/api';
 
 export interface IUpdateRoleCommand {
-  id: string;
-  payload: IRolePayload;
+  id: IRoleResponse['id'];
+  payload: IUpdateRoleDto;
 }
 
-export interface IRemoveRoleCommand {
-  id: string;
-}
+export type IRemoveRoleCommand = Pick<IRoleResponse, 'id'>;
 
 export interface IRoleDialogData {
-  role?: IRole;
+  role?: IRoleResponse;
 }
 
 export interface IRoleDialogResult {
-  payload: IRolePayload;
+  payload: ICreateRoleDto;
 }
 
 export interface IRemoveRoleDialogData {
-  role: IRole;
+  role: IRoleResponse;
 }
 
 export interface IRolesState {
-  roles: IRole[];
+  roles: IRolesControllerFindAllResponse['data'][0];
   isLoading: boolean;
   isSaving: boolean;
   removingRoleId: string;

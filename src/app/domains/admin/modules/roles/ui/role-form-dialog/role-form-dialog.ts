@@ -4,7 +4,8 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { IRoleDialogData, IRoleDialogResult, IRolePayload } from '../../interfaces';
+import { ICreateRoleDto } from '@/app/core/api';
+import { IRoleDialogData, IRoleDialogResult } from '../../interfaces';
 
 @Component({
   imports: [FormField, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule],
@@ -14,7 +15,7 @@ export class RoleFormDialog {
   protected readonly data = inject<IRoleDialogData>(MAT_DIALOG_DATA);
   private readonly dialogRef = inject(MatDialogRef<RoleFormDialog, IRoleDialogResult>);
 
-  protected readonly roleModel = signal<IRolePayload>({ name: this.data.role?.name ?? '' });
+  protected readonly roleModel = signal<ICreateRoleDto>({ name: this.data.role?.name ?? '' });
   protected readonly roleForm = form(this.roleModel, (schemaPath) => {
     required(schemaPath.name, { message: 'Name is required.' });
     validate(schemaPath.name, ({ value }) => {

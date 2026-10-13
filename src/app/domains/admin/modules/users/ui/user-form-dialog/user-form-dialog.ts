@@ -5,7 +5,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { IUserDialogData, IUserDialogResult, IUserPayload } from '../../interfaces';
+import { IUserDialogData, IUserDialogResult, IUserFormModel } from '../../interfaces';
 
 @Component({
   imports: [FormField, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatSelectModule],
@@ -15,7 +15,7 @@ export class UserFormDialog {
   protected readonly data = inject<IUserDialogData>(MAT_DIALOG_DATA);
   private readonly dialogRef = inject(MatDialogRef<UserFormDialog, IUserDialogResult>);
 
-  protected readonly userModel = signal<IUserPayload>({
+  protected readonly userModel = signal<IUserFormModel>({
     email: this.data.user?.email ?? '',
     name: this.data.user?.name ?? '',
     roles: this.data.roles.filter((role) => this.data.user?.roles.includes(role.name)).map((role) => role.id)

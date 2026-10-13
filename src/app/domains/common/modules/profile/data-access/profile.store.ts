@@ -1,16 +1,11 @@
 import { HttpClient } from '@angular/common/http';
+import { getApiErrorMessage, IUpdatePasswordDto, IUpdateUserDto, IUserResponse } from '@/app/core/api';
 import { inject } from '@angular/core';
 import { AuthStore } from '@/app/domains/auth/data-access/auth.store';
 import { patchState, signalStore, withMethods, withProps, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { catchError, concatMap, EMPTY, finalize, pipe, tap } from 'rxjs';
-import {
-  IProfileImageResponse,
-  IProfileResponse,
-  IProfileState,
-  IUpdatePasswordPayload,
-  IUpdateProfilePayload
-} from '../interfaces';
+import { IProfileState } from '../interfaces';
 
 const initialState: IProfileState = {
   isUpdatingProfile: false,
@@ -31,18 +26,18 @@ export const ProfileStore = signalStore(
     _http: inject(HttpClient)
   })),
   withMethods(({ _authStore, _http, ...store }) => ({
-    updateProfile: rxMethod<IUpdateProfilePayload>(
+    updateProfile: rxMethod<IUpdateUserDto>(
       pipe(
         concatMap((payload) => {
           patchState(store, { isUpdatingProfile: true, profileUpdated: false, profileError: '' });
-          return _http.patch<IProfileResponse>('/auth/profile', payload).pipe(
-            tap(({ data }) => {
-              _authStore.setUser(data);
+          return _http.patch<IUserResponse>('/auth/me/update', payload).pipe(
+            tap((user) => {
+              _authStore.setUser(user);
               patchState(store, { profileUpdated: true });
             }),
-            catchError(() => {
+            catchError((error: unknown) => {
               patchState(store, {
-                profileError: 'Impossible de mettre à jour le profil. Veuillez réessayer.'
+                profileError: getApiErrorMessage(error, 'Impossible de mettre à jour le profil. Veuillez réessayer.')
               });
               return EMPTY;
             }),
@@ -56,16 +51,19 @@ export const ProfileStore = signalStore(
         concatMap((image) => {
           patchState(store, { isUpdatingProfileImage: true, profileImageUpdated: false, profileImageError: '' });
           const body = new FormData();
-          body.append('thumb', image);
+          body.append('avatar', image);
 
-          return _http.post<IProfileImageResponse>('/users/me/profile-image', body).pipe(
-            tap(({ data }) => {
-              _authStore.setUser(data);
+          return _http.post<IUserResponse>('/users/profile/avatar', body).pipe(
+            tap((user) => {
+              _authStore.setUser(user);
               patchState(store, { profileImageUpdated: true });
             }),
-            catchError(() => {
+            catchError((error: unknown) => {
               patchState(store, {
-                profileImageError: 'Impossible de modifier la photo de profil. Veuillez réessayer.'
+                profileImageError: getApiErrorMessage(
+                  error,
+                  'Impossible de modifier la photo de profil. Veuillez réessayer.'
+                )
               });
               return EMPTY;
             }),
@@ -74,15 +72,21 @@ export const ProfileStore = signalStore(
         })
       )
     ),
-    updatePassword: rxMethod<IUpdatePasswordPayload>(
+    updatePassword: rxMethod<IUpdatePasswordDto>(
       pipe(
         concatMap((payload) => {
           patchState(store, { isUpdatingPassword: true, passwordUpdated: false, passwordError: '' });
-          return _http.patch<void>('/auth/update-password', payload).pipe(
-            tap(() => patchState(store, { passwordUpdated: true })),
-            catchError(() => {
+          return _http.patch<IUserResponse>('/auth/password/update', payload).pipe(
+            tap((user) => {
+              _authStore.setUser(user);
+              patchState(store, { passwordUpdated: true });
+            }),
+            catchError((error: unknown) => {
               patchState(store, {
-                passwordError: 'Impossible de mettre à jour le mot de passe. Veuillez réessayer.'
+                passwordError: getApiErrorMessage(
+                  error,
+                  'Impossible de mettre à jour le mot de passe. Veuillez réessayer.'
+                )
               });
               return EMPTY;
             }),

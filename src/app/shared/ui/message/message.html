@@ -8,7 +8,7 @@
   </span>
   <div class="min-w-0 flex-1">
     <p class="font-semibold">{{ displayedTitle() }}</p>
-    <p class="mt-1 text-sm" [class]="styles().message">{{ message() }}</p>
+    <p class="mt-1 text-sm whitespace-pre-line" [class]="styles().message">{{ message() }}</p>
   </div>
   @if (dismissible()) {
     <button

@@ -33,7 +33,7 @@
       <mat-icon class="text-on-surface-variant" svgIcon="triangle-alert" />
       <div>
         <div class="font-medium">Unable to load statistics</div>
-        <div class="mt-1 text-sm text-on-surface-variant">Please try again in a few moments.</div>
+        <div class="mt-1 text-sm whitespace-pre-line text-on-surface-variant">{{ errorMessage() }}</div>
       </div>
       <button matButton="outlined" type="button" (click)="statsResource.reload()">Try again</button>
     </div>

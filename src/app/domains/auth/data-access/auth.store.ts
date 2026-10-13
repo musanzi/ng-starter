@@ -1,18 +1,15 @@
 import { signalStore, withState, withMethods, patchState, withProps, withComputed } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, tap, catchError, of, exhaustMap, map } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
 import { computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { IUser } from '@/app/shared/interfaces';
-
-interface IAuthStore {
-  user: IUser | null;
-}
+import { HttpClient } from '@angular/common/http';
+import { IUserResponse } from '@/app/core/api';
+import { IAuthState } from '../interfaces';
 
 export const AuthStore = signalStore(
   { providedIn: 'root' },
-  withState<IAuthStore>({ user: null }),
+  withState<IAuthState>({ user: null }),
   withProps(() => ({
     _http: inject(HttpClient),
     _router: inject(Router)
@@ -27,7 +24,7 @@ export const AuthStore = signalStore(
   })),
   withMethods(({ _http, _router, ...store }) => ({
     initialize: () => {
-      return _http.get<IUser>('/auth/me').pipe(
+      return _http.get<IUserResponse>('/auth/me').pipe(
         map((user) => {
           patchState(store, { user });
           return user;
@@ -41,7 +38,7 @@ export const AuthStore = signalStore(
     signOut: rxMethod<void>(
       pipe(
         exhaustMap(() =>
-          _http.post<void>('/auth/signout', {}).pipe(
+          _http.post<null>('/auth/signout', {}).pipe(
             tap(() => {
               _router.navigate(['/']);
               patchState(store, { user: null });
@@ -53,7 +50,7 @@ export const AuthStore = signalStore(
         )
       )
     ),
-    setUser: (user: IUser | null) => {
+    setUser: (user: IUserResponse | null) => {
       patchState(store, { user });
     }
   }))

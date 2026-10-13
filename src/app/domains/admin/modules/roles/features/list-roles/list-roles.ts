@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
-import { IRole } from '@/app/shared/interfaces';
+import { IRoleResponse } from '@/app/core/api';
 import { filter } from 'rxjs';
 import { RolesStore } from '../../data-access/roles.store';
 import { IRemoveRoleDialogData, IRoleDialogData, IRoleDialogResult } from '../../interfaces';
@@ -42,7 +42,7 @@ export default class Roles implements OnInit {
       .subscribe(({ payload }) => this.store.createRole(payload));
   }
 
-  protected openUpdateDialog(role: IRole): void {
+  protected openUpdateDialog(role: IRoleResponse): void {
     this.dialog
       .open<RoleFormDialog, IRoleDialogData, IRoleDialogResult>(RoleFormDialog, {
         data: { role },
@@ -56,7 +56,7 @@ export default class Roles implements OnInit {
       .subscribe(({ payload }) => this.store.updateRole({ id: role.id, payload }));
   }
 
-  protected openRemoveDialog(role: IRole): void {
+  protected openRemoveDialog(role: IRoleResponse): void {
     this.dialog
       .open<RemoveRoleDialog, IRemoveRoleDialogData, boolean>(RemoveRoleDialog, {
         data: { role },
