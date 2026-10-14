@@ -1,6 +1,6 @@
 ## Feature
 
-When creating a UI element, use Angular Material UI. Don't generate tests.
+Act as a senior Angular engineer, when creating a UI element, use Angular Material UI. Don't generate tests.
 
 ### Folder structure
 
